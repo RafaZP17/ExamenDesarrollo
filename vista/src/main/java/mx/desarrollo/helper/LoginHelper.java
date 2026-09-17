@@ -11,7 +11,7 @@ import mx.desarrollo.entity.Usuario;
 public class LoginHelper {
     private DelegateUsuario delegateUsuario = new DelegateUsuario();
 
-    public Usuario login(String username, String password) {
+    public Usuario Login(String username, String password) {
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             return null;
         }
