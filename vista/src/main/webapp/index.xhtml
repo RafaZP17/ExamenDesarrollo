@@ -9,7 +9,7 @@
     <title>SAUAP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&amp;family=Outfit:wght@700&amp;display=swap" rel="stylesheet" />
     <link href="styles.css" rel="stylesheet" type="text/css"/>
 </h:head>
@@ -83,7 +83,7 @@
                 </section>
             </main>
 
-            <!-- Panel 2: Asignaturas -->
+            <!-- Panel 2: Asignaturas
             <main class="main view-panel" id="view-asignaturas">
                 <header class="header">
                     <div class="header-titles">
@@ -91,18 +91,18 @@
                         <p>Registro, Consulta y Modificación de las Asignaturas.</p>
                     </div>
                     <p:commandButton id="btn-open-asignatura" styleClass="register-btn" type="button" onclick="PF('dlgAsignatura').show();">
-                            <span class="icon-box icon-box--16">
+                            <span class="icon-box icon-box-16">
                                 <p:graphicImage url="assets/plus.svg" alt="" width="16" height="16" />
                             </span>
                         <span>Registrar Asignatura</span>
                     </p:commandButton>
                 </header>
                 <section class="body" aria-label="Contenido">
-                    <!-- TODO: Cargar tabla de Asignaturas -->
+                     TODO: Cargar tabla de Asignaturas
                 </section>
-            </main>
+            </main> -->
 
-            <!-- Panel 3: Asignación -->
+            <!-- Panel 3: Asignación
             <main class="main view-panel" id="view-asignacion">
                 <header class="header">
                     <div class="header-titles">
@@ -110,16 +110,16 @@
                         <p>Asignación de asignaturas a profesores.</p>
                     </div>
                     <p:commandButton id="btn-open-asignacion" styleClass="register-btn" type="button" onclick="PF('dlgAsignacion').show();">
-                            <span class="icon-box icon-box--16">
+                            <span class="icon-box icon-box-16">
                                 <p:graphicImage url="assets/plus.svg" alt="" width="16" height="16" />
                             </span>
                         <span>Nueva Asignación</span>
                     </p:commandButton>
                 </header>
                 <section class="body" aria-label="Contenido">
-                    <!-- TODO: Cargar tabla de Asignaciones -->
+                     TODO: Cargar tabla de Asignaciones
                 </section>
-            </main>
+            </main> -->
         </div>
 
         <!-- 1. MODAL REGISTRAR PROFESOR -->
@@ -147,7 +147,7 @@
             </div>
         </p:dialog>
 
-        <!-- 2. MODAL REGISTRAR ASIGNATURA -->
+        <!-- 2. MODAL REGISTRAR ASIGNATURA
         <p:dialog header="Registrar Asignatura" widgetVar="dlgAsignatura" modal="true" responsive="true" resizable="false">
             <div class="modal-body">
                 <div class="form-group">
@@ -170,25 +170,25 @@
                     <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{asignaturaBean.guardar()}" update="messages" oncomplete="PF('dlgAsignatura').hide();" />
                 </div>
             </div>
-        </p:dialog>
+        </p:dialog> -->
 
-        <!-- 3. MODAL ASIGNAR HORARIO -->
+        <!-- 3. MODAL ASIGNAR HORARIO
         <p:dialog header="Asignar horario del profesor" widgetVar="dlgAsignacion" modal="true" responsive="true" resizable="false">
             <div class="modal-body">
                 <div class="form-group">
                     <p:outputLabel for="asig-profesor" value="Nombre del profesor:" />
                     <p:selectOneMenu id="asig-profesor" value="#{asignacionBean.idProfesor}" styleClass="select-input">
                         <f:selectItem itemLabel="Asignar" itemValue="" noSelectionOption="true" />
-                        <!-- TODO: Cargar lista de profesores -->
-                        <!-- <f:selectItems value="#{asignacionBean.listaProfesoresOptions}" /> -->
+                        TODO: Cargar lista de profesores
+                        <f:selectItems value="#{asignacionBean.listaProfesoresOptions}" />
                     </p:selectOneMenu>
                 </div>
                 <div class="form-group">
                     <p:outputLabel for="asig-materia" value="Asignatura:" />
                     <p:selectOneMenu id="asig-materia" value="#{asignacionBean.idAsignatura}" styleClass="select-input">
                         <f:selectItem itemLabel="Asignar" itemValue="" noSelectionOption="true" />
-                        <!-- TODO: Cargar lista de asignaturas -->
-                        <!-- <f:selectItems value="#{asignacionBean.listaAsignaturasOptions}" /> -->
+                        TODO: Cargar lista de asignaturas
+                        <f:selectItems value="#{asignacionBean.listaAsignaturasOptions}" />
                     </p:selectOneMenu>
                 </div>
                 <div class="form-group">
@@ -214,7 +214,7 @@
                     <p:commandButton value="Asignar" styleClass="modal-submit-btn" actionListener="#{asignacionBean.guardar()}" update="messages" oncomplete="PF('dlgAsignacion').hide();" />
                 </div>
             </div>
-        </p:dialog>
+        </p:dialog> -->
     </h:form>
 
     <script type="text/javascript" src="app.js"></script>
