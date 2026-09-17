@@ -1,22 +1,12 @@
 package mx.desarrollo.facade;
 
-import mx.desarrollo.delegate.DelegateUsuario;
 import mx.desarrollo.entity.Usuario;
+import mx.desarrollo.persitence.dao.UsuarioDAO;
 
 public class FacadeUsuario {
+    private UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-    private final DelegateUsuario delegateUsuario;
-
-    public FacadeUsuario() {
-        this.delegateUsuario = new DelegateUsuario();
+    public Usuario login(String username, String password) {
+        return usuarioDAO.login(username, password);
     }
-
-    public Usuario login(String password, String correo){
-        return delegateUsuario.login(password, correo);
-    }
-
-    public void saveUsario(Usuario usuario){
-        delegateUsuario.saveUsario(usuario);
-    }
-
 }

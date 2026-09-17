@@ -1,25 +1,11 @@
 package mx.desarrollo.delegate;
 
 import mx.desarrollo.entity.Usuario;
-import mx.desarrollo.persitence.integration.ServiceLocator;
-
-import java.util.List;
+import mx.desarrollo.integration.ServiceFacadeLocator;
 
 public class DelegateUsuario {
-    public Usuario login(String password, String correo){
-        Usuario usuario = new Usuario();
-        List<Usuario> usuarios = ServiceLocator.getInstanceUsuarioDAO().findAll();
 
-        for(Usuario us:usuarios){
-            if(us.getContrasena().equalsIgnoreCase(password) && us.getCorreo().equalsIgnoreCase(correo)){
-                usuario = us;
-            }
-        }
-        return usuario;
+    public Usuario login(String username, String password) {
+        return ServiceFacadeLocator.getInstanceFacadeUsuario().login(username, password);
     }
-
-    public void saveUsario(Usuario usuario){
-        ServiceLocator.getInstanceUsuarioDAO().save(usuario);
-    }
-
 }
