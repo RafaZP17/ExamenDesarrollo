@@ -35,25 +35,26 @@ public class LoginBeanUI implements Serializable{
         usuario= new Usuario();
     }
 
-     public void login() throws IOException{
+    public void login() throws IOException {
         String appURL = "/index.xhtml";
-        // los atributos de usuario vienen del xhtml 
-        Usuario us= new Usuario();
+        Usuario us = new Usuario();
         us.setId(0);
-        us = loginHelper.Login(usuario.getCorreo(), usuario.getContrasena());
-          if(us != null && us.getId()!=null){
-            // asigno el usuario encontrado al usuario de esta clase para que 
-            // se muestre correctamente en la pagina de informacion
-            usuario=us;
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + appURL);
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario o contraseña incorrecta:", "Intente de nuevo"));
+        us = loginHelper.Login(usuario.getUsername(), usuario.getPassword());
+
+        if (us != null && us.getId() != null) {
+            usuario = us;
+            FacesContext.getCurrentInstance().getExternalContext().redirect(
+                    FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + appURL
+            );
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario o contraseña incorrecta:", "Intente de nuevo")
+            );
         }
+
     }
 
-    
     /* getters y setters*/
-
     public Usuario getUsuario() {
         return usuario;
     }
@@ -61,16 +62,5 @@ public class LoginBeanUI implements Serializable{
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    
-    
-    
-    
-    
-    
-    
-    
 
-    
-
-    
 }

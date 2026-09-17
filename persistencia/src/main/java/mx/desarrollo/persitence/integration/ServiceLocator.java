@@ -38,12 +38,10 @@ public class ServiceLocator {
      * se crea la instancia de usuarioDAO si esta no existe
      */
     public static UsuarioDAO getInstanceUsuarioDAO(){
-        if(usuarioDAO == null){
-            usuarioDAO = new UsuarioDAO(getEntityManager());
-            return usuarioDAO;
-        } else{
-            return usuarioDAO;
+        if (usuarioDAO == null) {
+            usuarioDAO = new UsuarioDAO();
         }
+        return usuarioDAO;
     }
     
 }

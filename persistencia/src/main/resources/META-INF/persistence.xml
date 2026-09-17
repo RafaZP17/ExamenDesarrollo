@@ -8,7 +8,7 @@
 
 
         <!-- Declaración manual de entidades -->
-        <class>mx.desarrollo.entity.Alumno</class>
+        <!-- <class>mx.desarrollo.entity.Alumno</class> -->
         <class>mx.desarrollo.entity.Usuario</class>
         <class>mx.desarrollo.entity.Profesor</class>
 
@@ -21,7 +21,7 @@
 
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
 
 
             <property name="hibernate.hikari.minimumIdle" value="5"/>
