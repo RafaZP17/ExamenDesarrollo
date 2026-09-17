@@ -14,7 +14,6 @@ body {
     background: rgba(232, 232, 232, 1);
 }
 
-/* ---------- Shell principal ---------- */
 .page {
     display: flex;
     flex-direction: column;
@@ -31,7 +30,6 @@ body {
     background: #3a2a20;
 }
 
-/* ---------- Header ---------- */
 .header {
     flex-shrink: 0;
     width: 100%;
@@ -48,7 +46,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* ---------- Main Content ---------- */
 .main {
     position: relative;
     flex: 1;
@@ -60,7 +57,6 @@ body {
     padding: 20px 5vw;
 }
 
-/* ---------- Figuras Decorativas (Ángulo -42deg como en Figma/Original) ---------- */
 .decor {
     position: absolute;
     border-radius: 12px;
@@ -69,7 +65,6 @@ body {
     z-index: 1;
 }
 
-/* Esquina Superior Izquierda */
 .decor--1 {
     width: 280px;
     height: 280px;
@@ -86,7 +81,6 @@ body {
     background: rgba(47, 182, 103, 0.30);
 }
 
-/* Esquina Superior Derecha */
 .decor--3 {
     width: 320px;
     height: 320px;
@@ -95,7 +89,6 @@ body {
     background: rgba(47, 182, 103, 0.13);
 }
 
-/* Esquina Inferior Derecha */
 .decor--4 {
     width: 480px;
     height: 480px;
@@ -104,7 +97,6 @@ body {
     background: rgba(47, 182, 103, 0.13);
 }
 
-/* Composición Inferior Izquierda (Montañas superpuestas) */
 .decor--5 {
     width: 380px;
     height: 380px;
@@ -155,7 +147,6 @@ body {
     border: 2px solid rgba(0, 0, 0, 0.5);
 }
 
-/* ---------- Marca (Izquierda) ---------- */
 .brand {
     position: relative;
     z-index: 10;
@@ -196,7 +187,6 @@ body {
     line-height: 1.3;
 }
 
-/* ---------- Tarjeta de Login (Derecha) ---------- */
 .login-card {
     position: relative;
     z-index: 10;
@@ -280,7 +270,6 @@ body {
     background: rgba(50, 138, 61, 1);
 }
 
-/* Responsivo */
 @media (max-width: 880px) {
     .main {
         flex-direction: column;
