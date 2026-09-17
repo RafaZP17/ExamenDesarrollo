@@ -5,24 +5,16 @@
  */
 package mx.desarrollo.helper;
 
+import mx.desarrollo.delegate.DelegateUsuario;
 import mx.desarrollo.entity.Usuario;
-import mx.desarrollo.integration.ServiceFacadeLocator;
 
-import java.io.Serializable;
+public class LoginHelper {
+    private DelegateUsuario delegateUsuario = new DelegateUsuario();
 
-public class LoginHelper implements Serializable {
-    
-
-    /**
-     * Metodo para hacer login llamara a la instancia de usuarioFacade
-     * @param correo
-     * @param password
-     * @return 
-     */
-    public Usuario Login(String correo, String password){
-        return ServiceFacadeLocator.getInstanceFacadeUsuario().login(password, correo);
+    public Usuario login(String username, String password) {
+        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            return null;
+        }
+        return delegateUsuario.login(username, password);
     }
-    
-    
-    
 }
