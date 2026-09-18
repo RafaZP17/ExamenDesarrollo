@@ -1,3 +1,4 @@
+/* --- RESET Y ESTILOS GLOBALES --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -23,6 +24,7 @@ input {
     font-family: inherit;
 }
 
+/* --- LAYOUT PRINCIPAL --- */
 .app {
     display: flex;
     align-items: stretch;
@@ -31,6 +33,7 @@ input {
     overflow: hidden;
 }
 
+/* --- SIDEBAR --- */
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -180,7 +183,6 @@ input {
     color: #94a3b8;
 }
 
-/* Botón Sign Out */
 .sign-out {
     display: flex;
     align-items: center;
@@ -208,7 +210,13 @@ input {
     transform: scale(0.97);
 }
 
-/* Control de vistas/paneles */
+.sign-out .pi {
+    vertical-align: middle;
+    position: relative;
+    top: 6px;
+}
+
+/* --- VISTAS Y CONTENEDORES --- */
 .view-panel {
     display: none;
     flex: 1;
@@ -254,7 +262,6 @@ input {
     color: #475569;
 }
 
-/* Botón Registrar */
 .register-btn {
     display: flex;
     align-items: center;
@@ -287,77 +294,7 @@ input {
     overflow-y: auto;
 }
 
-/* ESTILOS DE LOS MODALES */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
-    z-index: 999;
-}
-
-.modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-container {
-    width: 100%;
-    max-width: 580px;
-    background: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    transform: scale(0.95);
-    transition: transform 0.2s ease;
-}
-
-.modal-overlay.active .modal-container {
-    transform: scale(1);
-}
-
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #00723f;
-    padding: 16px 24px;
-    color: #ffffff;
-}
-
-.modal-header h2 {
-    font-family: Outfit, sans-serif;
-    font-size: 22px;
-    font-weight: 600;
-}
-
-.modal-close {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: #ffffff;
-    font-size: 22px;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s ease;
-}
-
-.modal-close:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
+/* --- FORMULARIOS Y ESTRUCTURA DE MODALES --- */
 .modal-body {
     padding: 28px 32px;
     display: flex;
@@ -371,29 +308,12 @@ input {
     justify-content: space-between;
 }
 
-.form-group label {
+.form-group label,
+.form-group .ui-outputlabel {
     font-size: 14px;
     font-weight: 600;
     color: #0f172a;
     width: 170px;
-}
-
-.form-group input,
-.form-group select {
-    flex: 1;
-    padding: 10px 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    background: #f8fafc;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #00723f;
-    background: #ffffff;
 }
 
 .modal-footer {
@@ -420,4 +340,59 @@ input {
 
 .modal-submit-btn:active {
     transform: scale(0.98);
+}
+
+.ui-button-text-icon-left .ui-button-text {
+    padding: .3em 1em .3em .5em;
+}
+
+.ui-dialog.custom-dialog {
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+    border: none !important;
+    max-width: 580px !important;
+    width: 100% !important;
+}
+
+.ui-dialog.custom-dialog .ui-dialog-content {
+    padding: 0 !important;
+    background: #ffffff !important;
+    width: 100% !important;
+}
+
+.ui-dialog.custom-dialog .ui-dialog-titlebar {
+    background: #00723f !important;
+    color: #ffffff !important;
+    font-family: Outfit, sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    padding: 16px 24px !important;
+    border: none !important;
+}
+
+.ui-dialog.custom-dialog .ui-dialog-titlebar-close {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+}
+
+.ui-inputtext.custom-input {
+    flex: 1 !important;
+    padding: 10px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    background: #f8fafc !important;
+    font-size: 14px !important;
+    outline: none !important;
+    width: 100% !important;
+    box-shadow: none !important;
+}
+
+.ui-inputtext.custom-input:focus {
+    border-color: #00723f !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
 }

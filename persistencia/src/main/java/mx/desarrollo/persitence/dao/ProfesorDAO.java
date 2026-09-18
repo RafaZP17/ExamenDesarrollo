@@ -8,7 +8,7 @@ import jakarta.persistence.Persistence;
 public class ProfesorDAO {
 
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("PersistencePU");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistencePU");
 
     public void guardar(Profesor profesor) {
         EntityManager em = emf.createEntityManager();

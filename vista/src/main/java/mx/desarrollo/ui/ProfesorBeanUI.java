@@ -7,12 +7,16 @@ import jakarta.faces.context.FacesContext;
 import mx.desarrollo.entity.Profesor;
 import mx.desarrollo.delegate.DelegateProfesor; // Ojo: si esta sale roja, presiona Alt+Enter para corregir la ruta
 
+import java.util.List;
+
 @Named("profesorBean")
 @RequestScoped
 public class ProfesorBeanUI {
 
     private Profesor profesor;
     private DelegateProfesor delegate;
+
+    private List<Profesor> listaProfesores;
 
     public ProfesorBeanUI() {
         this.profesor = new Profesor();
@@ -38,4 +42,8 @@ public class ProfesorBeanUI {
     public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
     }
+
+    public List<Profesor> getListaProfesores() { return listaProfesores;}
+
+    public void setListaProfesores(List<Profesor> listaProfesores) { this.listaProfesores = listaProfesores;}
 }

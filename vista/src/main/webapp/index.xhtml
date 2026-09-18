@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&amp;family=Outfit:wght@700&amp;display=swap" rel="stylesheet" />
-    <link href="styles.css" rel="stylesheet" type="text/css"/>
+    <link href="resources/style.css" rel="stylesheet" type="text/css"/>
 </h:head>
 
 <h:body>
@@ -27,26 +27,26 @@
                     <nav class="nav" aria-label="Principal">
                         <a class="nav-item nav-item--active" href="#" data-target="profesores">
                                 <span class="icon-box icon-box--20">
-                                    <p:graphicImage url="assets/myspace.png" alt="" width="20" height="20" />
+                                    <p:graphicImage url="resources/myspace.png" alt="" width="20" height="20" />
                                 </span>
                             <span>Profesores</span>
                         </a>
                         <a class="nav-item" href="#" data-target="asignaturas">
                                 <span class="icon-box icon-box--20">
-                                    <p:graphicImage url="assets/file-text.svg" alt="" width="20" height="20" />
+                                    <p:graphicImage url="resources/file-text.svg" alt="" width="20" height="20" />
                                 </span>
                             <span>Asignaturas</span>
                         </a>
                         <a class="nav-item" href="#" data-target="asignacion">
                                 <span class="icon-box icon-box--20">
-                                    <p:graphicImage url="assets/folder-open.svg" alt="" width="20" height="20" />
+                                    <p:graphicImage url="resources/folder-open.svg" alt="" width="20" height="20" />
                                 </span>
                             <span>Asignación</span>
                         </a>
                     </nav>
                 </div>
                 <div class="sidebar-footer">
-                    <p:graphicImage styleClass="footer-line" url="assets/line.svg" alt="" />
+                    <p:graphicImage styleClass="footer-line" url="resources/line.svg" alt="" />
                     <div class="user-block">
                         <div class="avatar" aria-hidden="true"></div>
                         <div class="user-meta">
@@ -54,12 +54,11 @@
                             <p class="user-email">correo</p>
                         </div>
                     </div>
-                    <p:commandButton styleClass="sign-out" type="button" actionListener="#{usuarioBean.signOut()}">
-                            <span class="icon-box icon-box--16">
-                                <p:graphicImage url="assets/log-out.svg" alt="" width="16" height="16" />
-                            </span>
-                        <span>Sign Out</span>
-                    </p:commandButton>
+                    <p:commandButton styleClass="sign-out"
+                                     type="button"
+                                     actionListener="#{usuarioBean.signOut()}"
+                                     value="Cerrar Sesión"
+                                     icon="pi pi-sign-out" />
                 </div>
             </aside>
 
@@ -72,7 +71,7 @@
                     </div>
                     <p:commandButton id="btn-open-profesor" styleClass="register-btn" type="button" onclick="PF('dlgProfesor').show();">
                             <span class="icon-box icon-box--16">
-                                <p:graphicImage url="assets/plus.svg" alt="" width="16" height="16" />
+                                <p:graphicImage url="resources/plus.svg" alt="" width="16" height="16" />
                             </span>
                         <span>Registrar Profesor</span>
                     </p:commandButton>
@@ -92,7 +91,7 @@
                     </div>
                     <p:commandButton id="btn-open-asignatura" styleClass="register-btn" type="button" onclick="PF('dlgAsignatura').show();">
                             <span class="icon-box icon-box-16">
-                                <p:graphicImage url="assets/plus.svg" alt="" width="16" height="16" />
+                                <p:graphicImage url="resources/plus.svg" alt="" width="16" height="16" />
                             </span>
                         <span>Registrar Asignatura</span>
                     </p:commandButton>
@@ -111,7 +110,7 @@
                     </div>
                     <p:commandButton id="btn-open-asignacion" styleClass="register-btn" type="button" onclick="PF('dlgAsignacion').show();">
                             <span class="icon-box icon-box-16">
-                                <p:graphicImage url="assets/plus.svg" alt="" width="16" height="16" />
+                                <p:graphicImage url="resources+/plus.svg" alt="" width="16" height="16" />
                             </span>
                         <span>Nueva Asignación</span>
                     </p:commandButton>
@@ -122,27 +121,28 @@
             </main> -->
         </div>
 
-        <!-- 1. MODAL REGISTRAR PROFESOR -->
-        <p:dialog header="Registrar Profesor" widgetVar="dlgProfesor" modal="true" responsive="true" resizable="false">
+        <!-- MODAL REGISTRAR PROFESOR CON PRIMEFACES -->
+        <p:dialog header="Registrar Profesor" widgetVar="dlgProfesor" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
+
             <div class="modal-body">
                 <div class="form-group">
                     <p:outputLabel for="prof-nombre" value="Nombre:" />
-                    <p:inputText id="prof-nombre" value="#{profesorBean.profesor.nombre}" />
+                    <p:inputText id="prof-nombre" value="#{profesorBean.profesor.nombre}" styleClass="custom-input" />
                 </div>
                 <div class="form-group">
                     <p:outputLabel for="prof-paterno" value="Apellido Paterno:" />
-                    <p:inputText id="prof-paterno" value="#{profesorBean.profesor.apellidoPaterno}" />
+                    <p:inputText id="prof-paterno" value="#{profesorBean.profesor.apellidoPaterno}" styleClass="custom-input" />
                 </div>
                 <div class="form-group">
                     <p:outputLabel for="prof-materno" value="Apellido Materno:" />
-                    <p:inputText id="prof-materno" value="#{profesorBean.profesor.apellidoMaterno}" />
+                    <p:inputText id="prof-materno" value="#{profesorBean.profesor.apellidoMaterno}" styleClass="custom-input" />
                 </div>
                 <div class="form-group">
                     <p:outputLabel for="prof-rfc" value="RFC:" />
-                    <p:inputText id="prof-rfc" value="#{profesorBean.profesor.rfc}" />
+                    <p:inputText id="prof-rfc" value="#{profesorBean.profesor.rfc}" styleClass="custom-input" />
                 </div>
                 <div class="modal-footer">
-                    <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardar()}" update="messages" oncomplete="PF('dlgProfesor').hide();" />
+                    <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" update="messages" oncomplete="PF('dlgProfesor').hide();" />
                 </div>
             </div>
         </p:dialog>

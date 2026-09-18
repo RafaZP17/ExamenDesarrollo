@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const navItems = document.querySelectorAll(".nav-item");
     const panels = document.querySelectorAll(".view-panel");
 
-    // NAVEGACIÓN RÁPIDA ENTRE PESTAÑAS
     navItems.forEach((item) => {
         item.addEventListener("click", (e) => {
             e.preventDefault();
@@ -22,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // CONTROL DE MODALES CON AUTO-RESET
     const setupModal = (btnId, modalId) => {
         const btn = document.getElementById(btnId);
         const modal = document.getElementById(modalId);
