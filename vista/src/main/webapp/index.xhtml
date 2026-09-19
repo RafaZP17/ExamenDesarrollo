@@ -68,6 +68,7 @@
                     <p:commandButton id="btn-open-profesor" value="Registrar Profesor" styleClass="register-btn" type="button" onclick="PF('dlgProfesor').show();" icon="pi pi-plus" />
                 </header>
                 <section class="body" aria-label="Contenido">
+                    <h2 style="padding: 0px 0px 15px;">Profesores Registrados</h2>
                     <p:dataTable id="dtProfesores" value="#{profesorBean.listaProfesores}" var="prof" responsiveLayout="scroll" emptyMessage="No hay profesores registrados actualmente.">
 
                         <p:column headerText="ID">
