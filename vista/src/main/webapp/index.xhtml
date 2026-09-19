@@ -166,7 +166,7 @@
                         <p:inputText id="prof-rfc" value="#{profesorBean.profesor.rfc}" styleClass="custom-input" />
                     </div>
                     <div class="modal-footer">
-                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+                        <p:commandButton value="Registrar" style="padding: 3px 32px !important;" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
                     </div>
                 </div>
             </h:panelGroup>

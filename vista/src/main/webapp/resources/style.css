@@ -317,7 +317,8 @@ input {
     margin-top: 8px;
 }
 
-.modal-submit-btn {
+button.ui-button.modal-submit-btn,
+.custom-dialog .modal-submit-btn {
     background: #419670;
     color: #ffffff;
     border: 1px solid #2d7353;
@@ -326,7 +327,6 @@ input {
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .modal-submit-btn:hover {
@@ -391,3 +391,4 @@ input {
     background: #ffffff;
     box-shadow: none;
 }
+
