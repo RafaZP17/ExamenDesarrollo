@@ -3,6 +3,8 @@ package mx.desarrollo.delegate;
 import mx.desarrollo.entity.Profesor;
 import mx.desarrollo.persitence.dao.ProfesorDAO;
 
+import java.util.List;
+
 public class DelegateProfesor {
 
 
@@ -30,5 +32,10 @@ public class DelegateProfesor {
 
         // Si sobrevive a las validaciones de arriba, le damos luz verde al DAO para guardarlo en MySQL
         profesorDAO.guardar(profesor);
+    }
+
+    //Metodo que retorna la lista de profesores para mostrarse en la vista
+    public List<Profesor> obtenerListaProfesores () {
+        return profesorDAO.listar();
     }
 }

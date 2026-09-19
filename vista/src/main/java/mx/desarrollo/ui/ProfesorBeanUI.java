@@ -6,6 +6,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import mx.desarrollo.entity.Profesor;
 import mx.desarrollo.delegate.DelegateProfesor; // Ojo: si esta sale roja, presiona Alt+Enter para corregir la ruta
+import org.primefaces.PrimeFaces;
 
 import java.util.List;
 
@@ -21,18 +22,29 @@ public class ProfesorBeanUI {
     public ProfesorBeanUI() {
         this.profesor = new Profesor();
         this.delegate = new DelegateProfesor();
+        this.listaProfesores = this.delegate.obtenerListaProfesores();
     }
 
     public void guardarProfesor() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        PrimeFaces pf = PrimeFaces.current();
+
         try {
             delegate.registrarProfesor(profesor);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Profesor registrado correctamente."));
             profesor = new Profesor();
+            this.listaProfesores = this.delegate.obtenerListaProfesores();
+            pf.ajax().addCallbackParam("isSaved", true);
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
+            pf.ajax().addCallbackParam("isSaved", false);
         }
+    }
+
+    public void limpiarFormulario() {
+        this.profesor = new Profesor();
     }
 
     public Profesor getProfesor() {

@@ -77,7 +77,29 @@
                     </p:commandButton>
                 </header>
                 <section class="body" aria-label="Contenido">
-                    <p:dataTable value="#{profesorBean.listaProfesores}" var="profesor"> ... </p:dataTable>
+                    <p:dataTable id="dtProfesores" value="#{profesorBean.listaProfesores}" var="prof" responsiveLayout="scroll" emptyMessage="No hay profesores registrados actualmente.">
+
+                        <p:column headerText="ID">
+                            <h:outputText value="#{prof.idProfesor}" />
+                        </p:column>
+
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{prof.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Apellido Paterno">
+                            <h:outputText value="#{prof.apellidoPaterno}" />
+                        </p:column>
+
+                        <p:column headerText="Apellido Materno">
+                            <h:outputText value="#{prof.apellidoMaterno}" />
+                        </p:column>
+
+                        <p:column headerText="RFC">
+                            <h:outputText value="#{prof.rfc}" />
+                        </p:column>
+
+                    </p:dataTable>
                 </section>
             </main>
 
@@ -123,27 +145,31 @@
         <!-- Registro Profesor -->
         <p:dialog header="Registrar Profesor" widgetVar="dlgProfesor" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
 
-            <div class="modal-body">
-                <div class="form-group">
-                    <p:outputLabel for="prof-nombre" value="Nombre:" />
-                    <p:inputText id="prof-nombre" value="#{profesorBean.profesor.nombre}" styleClass="custom-input" />
+            <p:ajax event="close" listener="#{profesorBean.limpiarFormulario}" update="dialogoProfesorForm" />
+
+            <h:panelGroup id="dialogoProfesorForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <p:outputLabel for="prof-nombre" value="Nombre:" />
+                        <p:inputText id="prof-nombre" value="#{profesorBean.profesor.nombre}" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="prof-paterno" value="Apellido Paterno:" />
+                        <p:inputText id="prof-paterno" value="#{profesorBean.profesor.apellidoPaterno}" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="prof-materno" value="Apellido Materno:" />
+                        <p:inputText id="prof-materno" value="#{profesorBean.profesor.apellidoMaterno}" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="prof-rfc" value="RFC:" />
+                        <p:inputText id="prof-rfc" value="#{profesorBean.profesor.rfc}" styleClass="custom-input" />
+                    </div>
+                    <div class="modal-footer">
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <p:outputLabel for="prof-paterno" value="Apellido Paterno:" />
-                    <p:inputText id="prof-paterno" value="#{profesorBean.profesor.apellidoPaterno}" styleClass="custom-input" />
-                </div>
-                <div class="form-group">
-                    <p:outputLabel for="prof-materno" value="Apellido Materno:" />
-                    <p:inputText id="prof-materno" value="#{profesorBean.profesor.apellidoMaterno}" styleClass="custom-input" />
-                </div>
-                <div class="form-group">
-                    <p:outputLabel for="prof-rfc" value="RFC:" />
-                    <p:inputText id="prof-rfc" value="#{profesorBean.profesor.rfc}" styleClass="custom-input" />
-                </div>
-                <div class="modal-footer">
-                    <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" update="messages" oncomplete="PF('dlgProfesor').hide();" />
-                </div>
-            </div>
+            </h:panelGroup>
         </p:dialog>
 
         <!-- Registro Asignatura
