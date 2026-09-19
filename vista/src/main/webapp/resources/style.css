@@ -337,10 +337,6 @@ button.ui-button.modal-submit-btn,
     transform: scale(0.98);
 }
 
-.ui-button-text-icon-left .ui-button-text {
-    padding: .3em 1em .3em .5em;
-}
-
 .ui-dialog.custom-dialog {
     background: #ffffff;
     border-radius: 12px;
@@ -392,3 +388,12 @@ button.ui-button.modal-submit-btn,
     box-shadow: none;
 }
 
+.register-btn.ui-button.ui-button-text-icon-left .ui-icon {
+    margin-top: 1px !important;
+    width: 14px !important;
+    height: 14px !important;
+}
+
+.register-btn.ui-button.ui-button-text-icon-left .ui-button-text {
+    padding: .3em 1em .3em .7em !important;
+}

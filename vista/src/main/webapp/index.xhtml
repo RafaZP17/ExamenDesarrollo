@@ -54,11 +54,7 @@
                             <p class="user-email">correo</p>
                         </div>
                     </div>
-                    <p:commandButton styleClass="sign-out"
-                                     type="button"
-                                     actionListener="#{usuarioBean.signOut()}"
-                                     value="Cerrar Sesión"
-                                     icon="pi pi-sign-out" />
+                    <p:commandButton styleClass="sign-out" type="button" actionListener="#{usuarioBean.signOut()}" value="Cerrar Sesión" icon="pi pi-sign-out" />
                 </div>
             </aside>
 
@@ -69,12 +65,7 @@
                         <h1>Profesores</h1>
                         <p>Registro, Consulta y Modificación de los profesores.</p>
                     </div>
-                    <p:commandButton id="btn-open-profesor" styleClass="register-btn" type="button" onclick="PF('dlgProfesor').show();">
-                            <span class="icon-box icon-box--16">
-                                <p:graphicImage url="resources/plus.svg" alt="" width="16" height="16" />
-                            </span>
-                        <span>Registrar Profesor</span>
-                    </p:commandButton>
+                    <p:commandButton id="btn-open-profesor" value="Registrar Profesor" styleClass="register-btn" type="button" onclick="PF('dlgProfesor').show();" icon="pi pi-plus" />
                 </header>
                 <section class="body" aria-label="Contenido">
                     <p:dataTable id="dtProfesores" value="#{profesorBean.listaProfesores}" var="prof" responsiveLayout="scroll" emptyMessage="No hay profesores registrados actualmente.">
