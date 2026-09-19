@@ -397,3 +397,7 @@ button.ui-button.modal-submit-btn,
 .register-btn.ui-button.ui-button-text-icon-left .ui-button-text {
     padding: .3em 1em .3em .7em !important;
 }
+
+.ui-button-text-icon-left .ui-button-text {
+    padding: 0em 0em 0em 1.5em;
+}
