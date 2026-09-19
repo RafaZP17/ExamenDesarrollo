@@ -32,7 +32,7 @@ public class ProfesorDAO {
     public List<Profesor> listar() {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.createQuery("SELECT p FROM Profesor p", Profesor.class).getResultList();
+            return em.createQuery("SELECT p FROM Profesor p ORDER BY nombre ASC ", Profesor.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
