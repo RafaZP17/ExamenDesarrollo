@@ -1,6 +1,7 @@
 package mx.desarrollo.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "profesor")
@@ -26,6 +27,19 @@ public class Profesor {
 
     @Column(name = "rfc", length = 13, nullable = false)
     private String rfc;
+
+    // Asegúrate de tener este import arriba: import java.util.List;
+
+    @OneToMany(mappedBy = "profesor", fetch = FetchType.LAZY)
+    private List<ProfesorUnidad> asignaciones;
+
+    public List<ProfesorUnidad> getAsignaciones() {
+        return asignaciones;
+    }
+
+    public void setAsignaciones(List<ProfesorUnidad> asignaciones) {
+        this.asignaciones = asignaciones;
+    }
 
 
     public Profesor() {

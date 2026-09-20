@@ -73,7 +73,9 @@ public class ProfesorDAO {
     public List<Profesor> listar() {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.createQuery("SELECT p FROM Profesor p ORDER BY nombre ASC ", Profesor.class).getResultList();
+            // Cumple Tarea 1 (ORDER BY) y Tarea 2 (FETCH de la relación de Ian)
+            String jpql = "SELECT DISTINCT p FROM Profesor p LEFT JOIN FETCH p.asignaciones ORDER BY p.nombre ASC";
+            return em.createQuery(jpql, Profesor.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
