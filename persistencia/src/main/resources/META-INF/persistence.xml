@@ -11,6 +11,8 @@
         <!-- <class>mx.desarrollo.entity.Alumno</class> -->
         <class>mx.desarrollo.entity.Usuario</class>
         <class>mx.desarrollo.entity.Profesor</class>
+        <class>mx.desarrollo.entity.UnidadAprendizaje</class>
+
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
