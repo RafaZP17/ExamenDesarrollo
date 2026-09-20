@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
@@ -38,9 +39,9 @@
                             <span>Asignaturas</span>
                         </a>
                         <a class="nav-item" href="#" data-target="asignacion">
-                                <span class="icon-box icon-box--20">
-                                    <p:graphicImage url="resources/folder-open.svg" alt="" width="20" height="20" />
-                                </span>
+                            <span class="icon-box icon-box--20">
+                                <p:graphicImage url="resources/folder-open.svg" alt="" width="20" height="20" />
+                            </span>
                             <span>Asignación</span>
                         </a>
                     </nav>
@@ -119,24 +120,44 @@
                 </section>
             </main>
 
-            <!-- Asignación
+            <!-- Asignación -->
             <main class="main view-panel" id="view-asignacion">
                 <header class="header">
                     <div class="header-titles">
                         <h1>Asignación</h1>
-                        <p>Asignación de asignaturas a profesores.</p>
+                        <p>Gestión de horarios por profesor.</p>
                     </div>
-                    <p:commandButton id="btn-open-asignacion" styleClass="register-btn" type="button" onclick="PF('dlgAsignacion').show();">
-                            <span class="icon-box icon-box-16">
-                                <p:graphicImage url="resources+/plus.svg" alt="" width="16" height="16" />
-                            </span>
-                        <span>Nueva Asignación</span>
-                    </p:commandButton>
+                    <p:commandButton id="btn-open-asignacion" value="Nueva Asignación" styleClass="register-btn" process="@this" actionListener="#{asignacionUI.limpiarFormulario()}" update=":mainForm:dialogoAsignacionForm" oncomplete="PF('dlgAsignacion').show();" icon="pi pi-plus" />
                 </header>
+
                 <section class="body" aria-label="Contenido">
-                     Cargar tabla de Asignaciones
+                    <h2 style="padding: 0px 0px 10px;">Listado de Asignaciones</h2>
+
+                    <p:outputPanel id="panelAsignaciones">
+                        <p:messages for="msgAsignacion" showDetail="true" closable="true"/>
+
+                        <!-- Tabla para mostrar las asignaciones registradas -->
+                        <p:dataTable id="dtAsignaciones" value="#{asignacionUI.listaAsignaciones}" var="asig" responsiveLayout="scroll" emptyMessage="No hay asignaciones registradas actualmente.">
+                            <p:column headerText="Profesor">
+                                <!-- Ajusta los nombres de las propiedades según tu entidad (ej. asig.profesor.nombre) -->
+                                <h:outputText value="#{asig.profesor.nombre} #{asig.profesor.apellidoPaterno}" />
+                            </p:column>
+                            <p:column headerText="Asignatura">
+                                <h:outputText value="#{asig.unidadAprendizaje.nombre}" />
+                            </p:column>
+                            <p:column headerText="Día">
+                                <h:outputText value="#{asig.dia}" />
+                            </p:column>
+                            <p:column headerText="Hora Inicio">
+                                <h:outputText value="#{asig.horaInicio}" />
+                            </p:column>
+                            <p:column headerText="Hora Fin">
+                                <h:outputText value="#{asig.horaFin}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
                 </section>
-            </main> -->
+            </main>
         </div>
 
         <!-- Registro Profesor -->
@@ -165,11 +186,11 @@
                         <p:inputText id="prof-rfc" value="#{profesorBean.profesor.rfc}" styleClass="custom-input" />
                     </div>
                     <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" process="dialogoProfesorForm" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
 
-                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{profesorBean.actualizarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{profesorBean.actualizarProfesor()}" process="dialogoProfesorForm" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
 
-                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{profesorBean.eliminarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{profesorBean.eliminarProfesor()}" process="@this" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar este profesor?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>
@@ -204,11 +225,11 @@
                     </div>
 
                     <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.guardar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.guardar()}" process="dialogoAsignaturaForm" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
 
-                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.actualizar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.actualizar()}" process="dialogoAsignaturaForm" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
 
-                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{catalogoUI.eliminar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{catalogoUI.eliminar()}" process="@this" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignatura?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>
@@ -216,49 +237,63 @@
             </h:panelGroup>
         </p:dialog>
 
-        <!-- 3. Asignacion Unidad
-        <p:dialog header="Asignar horario del profesor" widgetVar="dlgAsignacion" modal="true" responsive="true" resizable="false">
-            <div class="modal-body">
-                <div class="form-group">
-                    <p:outputLabel for="asig-profesor" value="Nombre del profesor:" />
-                    <p:selectOneMenu id="asig-profesor" value="#{asignacionBean.idProfesor}" styleClass="select-input">
-                        <f:selectItem itemLabel="Asignar" itemValue="" noSelectionOption="true" />
-                         Cargar lista de profesores
-                        <f:selectItems value="#{asignacionBean.listaProfesoresOptions}" />
-                    </p:selectOneMenu>
+        <!-- Asignacion Unidad -->
+        <p:dialog widgetVar="dlgAsignacion" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
+            <f:facet name="header">
+                <h:outputText value="Asignar horario del profesor" />
+            </f:facet>
+
+            <h:panelGroup id="dialogoAsignacionForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <p:outputLabel for="asig-profesor" value="Nombre del profesor:" />
+                        <p:selectOneMenu id="asig-profesor" value="#{asignacionUI.idProfesorSel}" styleClass="select-input" required="true">
+                            <f:selectItem itemLabel="Seleccione un profesor" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{asignacionUI.listaProfesores}" var="p" itemLabel="#{p.nombre} #{p.apellidoPaterno}" itemValue="#{p.idProfesor}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="form-group">
+                        <p:outputLabel for="asig-materia" value="Asignatura:" />
+                        <p:selectOneMenu id="asig-materia" value="#{asignacionUI.idUnidadSel}" styleClass="select-input" required="true">
+                            <f:selectItem itemLabel="Seleccione una asignatura" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{asignacionUI.listaUnidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u.id}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="form-group">
+                        <p:outputLabel for="asig-dia" value="Día de la clase:" />
+                        <p:selectOneMenu id="asig-dia" value="#{asignacionUI.diaSel}" styleClass="select-input" required="true">
+                            <f:selectItem itemLabel="Seleccione un día" itemValue="" noSelectionOption="true" />
+                            <f:selectItem itemLabel="Lunes" itemValue="Lunes" />
+                            <f:selectItem itemLabel="Martes" itemValue="Martes" />
+                            <f:selectItem itemLabel="Miércoles" itemValue="Miércoles" />
+                            <f:selectItem itemLabel="Jueves" itemValue="Jueves" />
+                            <f:selectItem itemLabel="Viernes" itemValue="Viernes" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="form-group">
+                        <p:outputLabel for="asig-inicio" value="Hora Inicio (HH:mm):" />
+                        <p:datePicker id="asig-inicio" value="#{asignacionUI.horaInicio}" timeOnly="true" pattern="HH:mm" timeControlType="select" required="true" />
+                    </div>
+
+                    <div class="form-group">
+                        <p:outputLabel for="asig-fin" value="Hora Fin (HH:mm):" />
+                        <p:datePicker id="asig-fin" value="#{asignacionUI.horaFin}" timeOnly="true" pattern="HH:mm" timeControlType="select" required="true" />
+                    </div>
+
+                    <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <p:commandButton value="Asignar"
+                                         styleClass="modal-submit-btn"
+                                         actionListener="#{asignacionUI.guardarAsignacion()}"
+                                         process="dialogoAsignacionForm"
+                                         update="dialogoAsignacionForm messages :mainForm:dtAsignaciones"
+                                         oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <p:outputLabel for="asig-materia" value="Asignatura:" />
-                    <p:selectOneMenu id="asig-materia" value="#{asignacionBean.idAsignatura}" styleClass="select-input">
-                        <f:selectItem itemLabel="Asignar" itemValue="" noSelectionOption="true" />
-                        Cargar lista de asignaturas
-                        <f:selectItems value="#{asignacionBean.listaAsignaturasOptions}" />
-                    </p:selectOneMenu>
-                </div>
-                <div class="form-group">
-                    <p:outputLabel for="asig-dia" value="Día de la clase:" />
-                    <p:selectOneMenu id="asig-dia" value="#{asignacionBean.dia}" styleClass="select-input">
-                        <f:selectItem itemLabel="Asignar" itemValue="" noSelectionOption="true" />
-                        <f:selectItem itemLabel="Lunes" itemValue="Lunes" />
-                        <f:selectItem itemLabel="Martes" itemValue="Martes" />
-                        <f:selectItem itemLabel="Miércoles" itemValue="Miércoles" />
-                        <f:selectItem itemLabel="Jueves" itemValue="Jueves" />
-                        <f:selectItem itemLabel="Viernes" itemValue="Viernes" />
-                    </p:selectOneMenu>
-                </div>
-                <div class="form-group">
-                    <p:outputLabel for="asig-inicio" value="Hora Inicio:" />
-                    <p:datePicker id="asig-inicio" value="#{asignacionBean.horaInicio}" timeOnly="true" pattern="HH:mm" />
-                </div>
-                <div class="form-group">
-                    <p:outputLabel for="asig-fin" value="Hora Fin:" />
-                    <p:datePicker id="asig-fin" value="#{asignacionBean.horaFin}" timeOnly="true" pattern="HH:mm" />
-                </div>
-                <div class="modal-footer">
-                    <p:commandButton value="Asignar" styleClass="modal-submit-btn" actionListener="#{asignacionBean.guardar()}" update="messages" oncomplete="PF('dlgAsignacion').hide();" />
-                </div>
-            </div>
-        </p:dialog> -->
+            </h:panelGroup>
+        </p:dialog>
 
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>

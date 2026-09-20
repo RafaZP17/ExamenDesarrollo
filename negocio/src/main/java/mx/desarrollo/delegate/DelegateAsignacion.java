@@ -10,14 +10,11 @@ public class DelegateAsignacion {
     private ProfesorUnidadDAO dao = new ProfesorUnidadDAO();
 
     public void registrarAsignacion(ProfesorUnidad nuevaAsignacion) throws Exception {
-        // 1. Obtener todas las materias que el profesor ya tiene asignadas
         List<ProfesorUnidad> horarioExistente = dao.buscarPorProfesor(nuevaAsignacion.getProfesor().getIdProfesor());
 
-        // 2. Validar traslape día por día
         for (ProfesorUnidad asignada : horarioExistente) {
             if (asignada.getDia().equalsIgnoreCase(nuevaAsignacion.getDia())) {
 
-                // Regla matemática de traslape: (InicioA < FinB) Y (FinA > InicioB)
                 boolean hayTraslape = nuevaAsignacion.getHoraInicio().isBefore(asignada.getHoraFin())
                         && nuevaAsignacion.getHoraFin().isAfter(asignada.getHoraInicio());
 
@@ -29,7 +26,14 @@ public class DelegateAsignacion {
             }
         }
 
-        // 3. Si aprueba la validación, se guarda en la BD
         dao.guardar(nuevaAsignacion);
+    }
+
+    public List<ProfesorUnidad> obtenerAsignacionesPorProfesor(Integer idProfesor) {
+        return dao.buscarPorProfesor(idProfesor);
+    }
+
+    public List<ProfesorUnidad> obtenerTodas() {
+        return dao.obtenerTodas(); // Asegúrate de que tu ProfesorUnidadDAO también tenga este método implementado
     }
 }

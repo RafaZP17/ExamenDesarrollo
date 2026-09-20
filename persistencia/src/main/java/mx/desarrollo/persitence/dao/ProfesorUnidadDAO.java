@@ -34,6 +34,24 @@ public class ProfesorUnidadDAO {
         }
     }
 
+    public List<ProfesorUnidad> obtenerTodas() {
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            TypedQuery<ProfesorUnidad> query = em.createQuery(
+                    "SELECT pu FROM ProfesorUnidad pu " +
+                            "JOIN FETCH pu.unidadAprendizaje " +
+                            "JOIN FETCH pu.profesor",
+                    ProfesorUnidad.class
+            );
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        } finally {
+            em.close();
+        }
+    }
+
     /**
      * Guarda la nueva asignación de la unidad con el profesor, el día y las horas.
      */

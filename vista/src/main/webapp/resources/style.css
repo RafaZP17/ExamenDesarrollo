@@ -417,3 +417,35 @@ button#mainForm\:Sigt-outBttn {
     background-color: #f1f5f9 !important;
     cursor: pointer !important;
 }
+
+.table-responsive {
+    position: relative;
+    overflow-x: auto;
+}
+.calendar-header {
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+.time-col {
+    width: 70px;
+    flex-shrink: 0;
+}
+.day-col {
+    position: relative;
+    min-width: 140px;
+    border-left: 1px solid #dee2e6;
+}
+.hour-row {
+    height: 70px;
+    border-bottom: 1px solid #f1f3f5;
+}
+.subject-block {
+    position: absolute;
+    padding: 6px;
+    border-left: 4px solid;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}

@@ -1,14 +1,19 @@
 package mx.desarrollo.ui;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.ejb.Local;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import mx.desarrollo.delegate.DelegateAsignacion;
+import mx.desarrollo.delegate.DelegateProfesor;
+import mx.desarrollo.delegate.DelegateUnidadAprendizaje;
 import mx.desarrollo.entity.Profesor;
 import mx.desarrollo.entity.ProfesorUnidad;
 import mx.desarrollo.entity.UnidadAprendizaje;
 import mx.desarrollo.integration.ServiceFacadeLocator;
+import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
 import java.time.LocalTime;
@@ -19,32 +24,46 @@ import java.util.List;
 @ViewScoped
 public class AsignacionBeanUI implements Serializable {
 
+    private  static final long serialVersionUID = 1L;
+
     private Integer idProfesorSel;
     private Integer idUnidadSel;
     private String diaSel;
-    private String horaInicioStr; // Formato "HH:mm"
-    private String horaFinStr;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
 
     private List<Profesor> listaProfesores;
     private List<UnidadAprendizaje> listaUnidades;
+    private List<ProfesorUnidad> listaAsignaciones;
+
+    private DelegateAsignacion delegateAsignacion;
+    private DelegateProfesor delegateProfesor;
+    private DelegateUnidadAprendizaje delegateUnidad;
 
     @PostConstruct
     public void init() {
-        // Cargar listas desde la base de datos a través de los facades correspondientes
-        // listaUnidades = ServiceFacadeLocator.getInstanceFacadeUnidadAprendizaje().obtenerTodas();
-        // listaProfesores = ...
+        this.delegateAsignacion = new DelegateAsignacion();
+        this.delegateProfesor = new DelegateProfesor();
+        this.delegateUnidad = new DelegateUnidadAprendizaje();
+
+        cargarListas();
+    }
+
+    public void cargarListas() {
+        this.listaProfesores = delegateProfesor.obtenerListaProfesores();
+        this.listaUnidades = delegateUnidad.obtenerTodas();
+        this.listaAsignaciones = delegateAsignacion.obtenerTodas();
     }
 
     public void guardarAsignacion() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        PrimeFaces pf = PrimeFaces.current();
+
         try {
             if (idProfesorSel == null || idUnidadSel == null || diaSel == null
-                    || horaInicioStr.isEmpty() || horaFinStr.isEmpty()) {
+                    || horaInicio == null || horaFin == null) {
                 throw new Exception("Todos los campos son obligatorios.");
             }
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            LocalTime horaInicio = LocalTime.parse(horaInicioStr, formatter);
-            LocalTime horaFin = LocalTime.parse(horaFinStr, formatter);
 
             if (!horaInicio.isBefore(horaFin)) {
                 throw new Exception("La hora de inicio debe ser anterior a la hora de fin.");
@@ -53,7 +72,6 @@ public class AsignacionBeanUI implements Serializable {
             Profesor prof = new Profesor();
             prof.setIdProfesor(idProfesorSel);
 
-            // Ajuste usando la entidad de tu compañero:
             UnidadAprendizaje uni = new UnidadAprendizaje();
             uni.setId(idUnidadSel);
 
@@ -64,15 +82,56 @@ public class AsignacionBeanUI implements Serializable {
             asignacion.setHoraInicio(horaInicio);
             asignacion.setHoraFin(horaFin);
 
-            // Llamada a la capa de negocio
-            ServiceFacadeLocator.getInstanceFacadeAsignacion().registrarAsignacion(asignacion);
+            delegateAsignacion.registrarAsignacion(asignacion);
+            this.listaAsignaciones = delegateAsignacion.obtenerTodas();
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Unidad asignada correctamente al profesor."));
 
+            limpiarFormulario();
+            pf.ajax().addCallbackParam("isSaved", true);
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Asignación", e.getMessage()));
+            pf.ajax().addCallbackParam("isSaved", false);
+        }
+    }
+
+    public void limpiarFormulario() {
+        this.idProfesorSel = null;
+        this.idUnidadSel = null;
+        this.diaSel = null;
+        this.horaInicio = null;
+        this.horaFin = null;
+    }
+
+    public List<ProfesorUnidad> obtenerAsignacionesProfesor(Integer idProfesor) {
+        return delegateAsignacion.obtenerAsignacionesPorProfesor(idProfesor);
+    }
+
+    public int calcularTop(LocalTime horaInicio) {
+        if (horaInicio == null) return 0;
+        int minutosDesdeLas7 = (horaInicio.getHour() - 7) * 60 + horaInicio.getMinute();
+        return (minutosDesdeLas7 * 70) / 60;
+    }
+
+    public int calcularHeight(LocalTime horaInicio, LocalTime horaFin) {
+        if (horaInicio == null || horaFin == null) return 70;
+        long minutosDuracion = java.time.Duration.between(horaInicio, horaFin).toMinutes();
+        return (int) ((minutosDuracion * 70) / 60);
+    }
+
+    public int obtenerDiaIndex(String dia) {
+        if (dia == null) return 0;
+        switch (dia.toLowerCase()) {
+            case "lunes": return 0;
+            case "martes": return 1;
+            case "miércoles": case "miercoles": return 2;
+            case "jueves": return 3;
+            case "viernes": return 4;
+            case "sábado": case "sabado": return 5;
+            default: return 0;
         }
     }
 
@@ -85,12 +144,15 @@ public class AsignacionBeanUI implements Serializable {
     public String getDiaSel() { return diaSel; }
     public void setDiaSel(String diaSel) { this.diaSel = diaSel; }
 
-    public String getHoraInicioStr() { return horaInicioStr; }
-    public void setHoraInicioStr(String horaInicioStr) { this.horaInicioStr = horaInicioStr; }
+    public LocalTime getHoraInicio() { return horaInicio; }
+    public void setHoraInicio(LocalTime horaInicio) { this.horaInicio = horaInicio; }
 
-    public String getHoraFinStr() { return horaFinStr; }
-    public void setHoraFinStr(String horaFinStr) { this.horaFinStr = horaFinStr; }
+    public LocalTime getHoraFin() { return horaFin; }
+    public void setHoraFin(LocalTime horaFin) { this.horaFin = horaFin; }
 
     public List<Profesor> getListaProfesores() { return listaProfesores; }
     public List<UnidadAprendizaje> getListaUnidades() { return listaUnidades; }
+
+    public List<ProfesorUnidad> getListaAsignaciones() { return listaAsignaciones; }
+    public void setListaAsignaciones(List<ProfesorUnidad> listaAsignaciones) { this.listaAsignaciones = listaAsignaciones; }
 }
