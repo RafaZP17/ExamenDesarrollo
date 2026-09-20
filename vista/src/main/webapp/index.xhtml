@@ -92,16 +92,16 @@
                         <h1>Asignaturas</h1>
                         <p>Registro, Consulta y Modificación de las Asignaturas.</p>
                     </div>
-                    <p:commandButton id="btn-open-asignatura" value="Registrar Asignatura" styleClass="register-btn" process="@this" actionListener="#{asignaturaBean.limpiarFormulario}" update=":mainForm:dialogoAsignaturaForm :mainForm:dlgAsignaturaHeader" oncomplete="PF('dlgAsignatura').show();" icon="pi pi-plus" />
+                    <p:commandButton id="btn-open-asignatura" value="Registrar Asignatura" styleClass="register-btn" process="@this" actionListener="#{catalogoUI.limpiarFormulario()}" update=":mainForm:dialogoAsignaturaForm :mainForm:dlgAsignaturaHeader" oncomplete="PF('dlgAsignatura').show();" icon="pi pi-plus" />
                 </header>
                 <section class="body" aria-label="Contenido">
                     <h2 style="padding: 0px 0px 10px;">Asignaturas Registradas</h2>
-                    <p:dataTable id="dtAsignaturas" value="#{asignaturaBean.listaAsignaturas}" var="asig" selectionMode="single" selection="#{asignaturaBean.asignatura}" rowKey="#{asig.idAsignatura}" responsiveLayout="scroll" emptyMessage="No hay asignaturas registradas actualmente.">
+                    <p:dataTable id="dtAsignaturas" value="#{catalogoUI.listaUnidades}" var="asig" selectionMode="single" selection="#{catalogoUI.unidad}" rowKey="#{asig.id}" responsiveLayout="scroll" emptyMessage="No hay asignaturas registradas actualmente.">
 
-                        <p:ajax event="rowDblselect" listener="#{asignaturaBean.onRowSelect}" update=":mainForm:dialogoAsignaturaForm :mainForm:dlgAsignaturaHeader" oncomplete="PF('dlgAsignatura').show();" />
+                        <p:ajax event="rowDblselect" listener="#{catalogoUI.onRowSelect}" update=":mainForm:dialogoAsignaturaForm :mainForm:dlgAsignaturaHeader" oncomplete="PF('dlgAsignatura').show();" />
 
                         <p:column headerText="ID">
-                            <h:outputText value="#{asig.idAsignatura}" />
+                            <h:outputText value="#{asig.id}" />
                         </p:column>
                         <p:column headerText="Nombre">
                             <h:outputText value="#{asig.nombre}" />
@@ -113,7 +113,7 @@
                             <h:outputText value="#{asig.horasTaller}" />
                         </p:column>
                         <p:column headerText="Horas Laboratorio">
-                            <h:outputText value="#{asig.horasLab}" />
+                            <h:outputText value="#{asig.horasLaboratorio}" />
                         </p:column>
                     </p:dataTable>
                 </section>
@@ -181,34 +181,34 @@
         <p:dialog widgetVar="dlgAsignatura" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
 
             <f:facet name="header">
-                <h:outputText id="dlgAsignaturaHeader" value="#{asignaturaBean.asignatura != null and asignaturaBean.asignatura.idAsignatura != null ? 'Editar / Consultar Asignatura' : 'Registrar Asignatura'}" />
+                <h:outputText id="dlgAsignaturaHeader" value="#{catalogoUI.unidad != null and catalogoUI.unidad.id != null ? 'Editar / Consultar Unidad Academica' : 'Registrar Unidad Academica'}" />
             </f:facet>
 
             <h:panelGroup id="dialogoAsignaturaForm">
                 <div class="modal-body">
                     <div class="form-group">
                         <p:outputLabel for="asig-nombre" value="Nombre:" />
-                        <p:inputText id="asig-nombre" value="#{asignaturaBean.asignatura.nombre}" styleClass="custom-input" />
+                        <p:inputText id="asig-nombre" value="#{catalogoUI.unidad.nombre}" styleClass="custom-input" />
                     </div>
                     <div class="form-group">
                         <p:outputLabel for="asig-clase" value="Horas Clase:" />
-                        <p:spinner id="asig-clase" value="#{asignaturaBean.asignatura.horasClase}" min="0" styleClass="custom-input" />
+                        <p:spinner id="asig-clase" value="#{catalogoUI.unidad.horasClase}" min="0" styleClass="custom-input" />
                     </div>
                     <div class="form-group">
                         <p:outputLabel for="asig-taller" value="Horas Taller:" />
-                        <p:spinner id="asig-taller" value="#{asignaturaBean.asignatura.horasTaller}" min="0" styleClass="custom-input" />
+                        <p:spinner id="asig-taller" value="#{catalogoUI.unidad.horasTaller}" min="0" styleClass="custom-input" />
                     </div>
                     <div class="form-group">
                         <p:outputLabel for="asig-lab" value="Horas Laboratorio:" />
-                        <p:spinner id="asig-lab" value="#{asignaturaBean.asignatura.horasLab}" min="0" styleClass="custom-input" />
+                        <p:spinner id="asig-lab" value="#{catalogoUI.unidad.horasLaboratorio}" min="0" styleClass="custom-input" />
                     </div>
 
                     <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{asignaturaBean.guardarAsignatura()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{asignaturaBean.asignatura.idAsignatura == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.guardar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
 
-                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{asignaturaBean.actualizarAsignatura()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{asignaturaBean.asignatura.idAsignatura != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.actualizar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
 
-                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{asignaturaBean.eliminarAsignatura()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{asignaturaBean.asignatura.idAsignatura != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{catalogoUI.eliminar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignatura?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>
@@ -266,8 +266,6 @@
         </p:confirmDialog>
 
     </h:form>
-
-
 
     <script type="text/javascript" src="app.js"></script>
 </h:body>

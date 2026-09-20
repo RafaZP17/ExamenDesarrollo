@@ -15,7 +15,7 @@ public class UnidadAprendizaje {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idunidad", nullable = false)
-    private int id;
+    private Integer id;
 
     @Size(max = 50)
     @NotNull
