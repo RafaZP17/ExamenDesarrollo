@@ -29,6 +29,47 @@ public class ProfesorDAO {
         }
     }
 
+    public void actualizar(Profesor profesor) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(profesor);
+            em.getTransaction().commit();
+            System.out.println("Profesor actualizado exitosamente en la BD.");
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    public void eliminar(Integer idProfesor) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Profesor profesorEnDb = em.find(Profesor.class, idProfesor);
+            if (profesorEnDb != null) {
+                em.remove(profesorEnDb);
+                em.getTransaction().commit();
+                System.out.println("Profesor eliminado exitosamente de la BD.");
+            } else {
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+            }
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
     public List<Profesor> listar() {
         EntityManager em = emf.createEntityManager();
         try {

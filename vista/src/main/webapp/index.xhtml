@@ -58,32 +58,29 @@
                         <h1>Profesores</h1>
                         <p>Registro, Consulta y Modificación de los profesores.</p>
                     </div>
-                    <p:commandButton id="btn-open-profesor" value="Registrar Profesor" styleClass="register-btn" type="button" onclick="PF('dlgProfesor').show();" icon="pi pi-plus" />
+                    <p:commandButton id="btn-open-profesor" value="Registrar Profesor" styleClass="register-btn" process="@this" actionListener="#{profesorBean.limpiarFormulario}" update=":mainForm:dialogoProfesorForm :mainForm:dlgHeader" oncomplete="PF('dlgProfesor').show();" icon="pi pi-plus" />
                 </header>
                 <section class="body" aria-label="Contenido">
                     <h2 style="padding: 0px 0px 10px;">Profesores Registrados</h2>
-                    <p:dataTable id="dtProfesores" value="#{profesorBean.listaProfesores}" var="prof" responsiveLayout="scroll" emptyMessage="No hay profesores registrados actualmente.">
+                    <p:dataTable id="dtProfesores" value="#{profesorBean.listaProfesores}" var="prof" selectionMode="single" selection="#{profesorBean.profesor}" rowKey="#{prof.idProfesor}" responsiveLayout="scroll" emptyMessage="No hay profesores registrados actualmente.">
+
+                        <p:ajax event="rowDblselect" listener="#{profesorBean.onRowSelect}" update=":mainForm:dialogoProfesorForm :mainForm:dlgHeader" oncomplete="PF('dlgProfesor').show();" />
 
                         <p:column headerText="ID">
                             <h:outputText value="#{prof.idProfesor}" />
                         </p:column>
-
                         <p:column headerText="Nombre">
                             <h:outputText value="#{prof.nombre}" />
                         </p:column>
-
                         <p:column headerText="Apellido Paterno">
                             <h:outputText value="#{prof.apellidoPaterno}" />
                         </p:column>
-
                         <p:column headerText="Apellido Materno">
                             <h:outputText value="#{prof.apellidoMaterno}" />
                         </p:column>
-
                         <p:column headerText="RFC">
                             <h:outputText value="#{prof.rfc}" />
                         </p:column>
-
                     </p:dataTable>
                 </section>
             </main>
@@ -128,9 +125,11 @@
         </div>
 
         <!-- Registro Profesor -->
-        <p:dialog header="Registrar Profesor" widgetVar="dlgProfesor" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
+        <p:dialog widgetVar="dlgProfesor" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
 
-            <p:ajax event="close" listener="#{profesorBean.limpiarFormulario}" update="dialogoProfesorForm" />
+            <f:facet name="header">
+                <h:outputText id="dlgHeader" value="#{profesorBean.profesor != null and profesorBean.profesor.idProfesor != null ? 'Editar / Consultar Profesor' : 'Registrar Profesor'}" />
+            </f:facet>
 
             <h:panelGroup id="dialogoProfesorForm">
                 <div class="modal-body">
@@ -150,12 +149,23 @@
                         <p:outputLabel for="prof-rfc" value="RFC:" />
                         <p:inputText id="prof-rfc" value="#{profesorBean.profesor.rfc}" styleClass="custom-input" />
                     </div>
-                    <div class="modal-footer">
-                        <p:commandButton value="Registrar" style="padding: 3px 32px !important;" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+                    <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{profesorBean.actualizarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{profesorBean.eliminarProfesor()}" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }">
+                            <p:confirm header="Confirmación" message="¿Estás seguro de eliminar este profesor?" icon="pi pi-alert" />
+                        </p:commandButton>
                     </div>
                 </div>
             </h:panelGroup>
         </p:dialog>
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+            <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" />
+        </p:confirmDialog>
 
         <!-- Registro Asignatura
         <p:dialog header="Registrar Asignatura" widgetVar="dlgAsignatura" modal="true" responsive="true" resizable="false">

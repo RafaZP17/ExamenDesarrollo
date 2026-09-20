@@ -412,3 +412,8 @@ button#mainForm\:Sigt-outBttn {
     background: #3b8765 !important;
     border: 1px solid white !important;
 }
+
+.ui-datatable .ui-datatable-data tr.ui-widget-content:hover {
+    background-color: #f1f5f9 !important;
+    cursor: pointer !important;
+}
