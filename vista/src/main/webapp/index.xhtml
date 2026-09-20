@@ -177,7 +177,44 @@
             </h:panelGroup>
         </p:dialog>
 
+        <!-- Registro / Edición Asignatura -->
+        <p:dialog widgetVar="dlgAsignatura" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
 
+            <f:facet name="header">
+                <h:outputText id="dlgAsignaturaHeader" value="#{asignaturaBean.asignatura != null and asignaturaBean.asignatura.idAsignatura != null ? 'Editar / Consultar Asignatura' : 'Registrar Asignatura'}" />
+            </f:facet>
+
+            <h:panelGroup id="dialogoAsignaturaForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <p:outputLabel for="asig-nombre" value="Nombre:" />
+                        <p:inputText id="asig-nombre" value="#{asignaturaBean.asignatura.nombre}" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="asig-clase" value="Horas Clase:" />
+                        <p:spinner id="asig-clase" value="#{asignaturaBean.asignatura.horasClase}" min="0" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="asig-taller" value="Horas Taller:" />
+                        <p:spinner id="asig-taller" value="#{asignaturaBean.asignatura.horasTaller}" min="0" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="asig-lab" value="Horas Laboratorio:" />
+                        <p:spinner id="asig-lab" value="#{asignaturaBean.asignatura.horasLab}" min="0" styleClass="custom-input" />
+                    </div>
+
+                    <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{asignaturaBean.guardarAsignatura()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{asignaturaBean.asignatura.idAsignatura == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{asignaturaBean.actualizarAsignatura()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{asignaturaBean.asignatura.idAsignatura != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{asignaturaBean.eliminarAsignatura()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{asignaturaBean.asignatura.idAsignatura != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
+                            <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignatura?" icon="pi pi-alert" />
+                        </p:commandButton>
+                    </div>
+                </div>
+            </h:panelGroup>
+        </p:dialog>
 
         <!-- 3. Asignacion Unidad
         <p:dialog header="Asignar horario del profesor" widgetVar="dlgAsignacion" modal="true" responsive="true" resizable="false">
