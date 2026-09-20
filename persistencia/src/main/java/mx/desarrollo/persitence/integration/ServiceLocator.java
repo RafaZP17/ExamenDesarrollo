@@ -7,6 +7,7 @@ package mx.desarrollo.persitence.integration;
 
 import jakarta.persistence.EntityManager;
 import mx.desarrollo.persitence.dao.AlumnoDAO;
+import mx.desarrollo.persitence.dao.UnidadAprendizajeDAO;
 import mx.desarrollo.persitence.dao.UsuarioDAO;
 import mx.desarrollo.persitence.persistence.HibernateUtil;
 
@@ -18,6 +19,7 @@ public class ServiceLocator {
 
     private static AlumnoDAO alumnoDAO;
     private static UsuarioDAO usuarioDAO;
+    private static UnidadAprendizajeDAO unidadAprendizajeDAO;
 
     private static EntityManager getEntityManager(){
         return HibernateUtil.getEntityManager();
@@ -43,6 +45,15 @@ public class ServiceLocator {
             return usuarioDAO;
         } else{
             return usuarioDAO;
+        }
+    }
+
+    public static UnidadAprendizajeDAO getInstanceUnidadAprendizajeDAO(){
+        if(unidadAprendizajeDAO == null){
+            unidadAprendizajeDAO = new UnidadAprendizajeDAO(getEntityManager());
+            return unidadAprendizajeDAO;
+        } else {
+            return unidadAprendizajeDAO;
         }
     }
     
