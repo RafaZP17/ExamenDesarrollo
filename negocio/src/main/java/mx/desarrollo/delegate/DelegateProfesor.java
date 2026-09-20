@@ -3,6 +3,7 @@ package mx.desarrollo.delegate;
 import mx.desarrollo.entity.Profesor;
 import mx.desarrollo.persitence.dao.ProfesorDAO;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class DelegateProfesor {
@@ -65,6 +66,13 @@ public class DelegateProfesor {
 
     //Metodo que retorna la lista de profesores para mostrarse en la vista
     public List<Profesor> obtenerListaProfesores () {
+
         return profesorDAO.listar();
+
+        if (lista != null && !lista.isEmpty()) {
+            lista.sort(Comparator.comparing(Profesor::getNombre, String.CASE_INSENSITIVE_ORDER));
+        }
+
+        return lista;
     }
 }

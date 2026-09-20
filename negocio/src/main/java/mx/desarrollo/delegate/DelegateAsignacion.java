@@ -34,6 +34,6 @@ public class DelegateAsignacion {
     }
 
     public List<ProfesorUnidad> obtenerTodas() {
-        return dao.obtenerTodas(); // Asegúrate de que tu ProfesorUnidadDAO también tenga este método implementado
+        return dao.obtenerTodas();
     }
 }
