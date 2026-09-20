@@ -5,8 +5,10 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import mx.desarrollo.entity.Profesor;
 import mx.desarrollo.entity.UnidadAprendizaje;
 import mx.desarrollo.helper.CatalogoHelper;
+import org.primefaces.event.SelectEvent;
 
 import java.io.Serializable;
 import java.util.List;
@@ -35,16 +37,43 @@ import java.util.List;
         }
 
         public void guardar() {
-            if (validarCampos()) mostrarResultado(catalogoHelper.guardar(unidad));
+            if (validarCampos()) {
+                boolean resultado = catalogoHelper.guardar(unidad);
+                mostrarResultado(resultado);
+            }
         }
 
         public void actualizar() {
-            if (validarCampos()) mostrarResultado(catalogoHelper.actualizar(unidad));
+            if (validarCampos()) {
+                boolean resultado = catalogoHelper.actualizar(unidad);
+                mostrarResultado(resultado);
+            }
         }
 
-        public void eliminar(UnidadAprendizaje u) {
-            catalogoHelper.eliminar(u);
-            cargarLista();
+        public void eliminar() {
+            FacesContext context = FacesContext.getCurrentInstance();
+            org.primefaces.PrimeFaces pf = org.primefaces.PrimeFaces.current();
+
+            try {
+                if (unidad == null || unidad.getId() == null) {
+                    throw new Exception("Error: Debe seleccionar una unidad para eliminar.");
+                }
+
+                catalogoHelper.eliminar(unidad);
+
+                context.addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Unidad eliminada correctamente."));
+
+                this.unidad = new UnidadAprendizaje();
+                cargarLista();
+
+                pf.ajax().addCallbackParam("isSaved", true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                context.addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
+                pf.ajax().addCallbackParam("isSaved", false);
+            }
         }
 
         public void nuevo() {
@@ -61,15 +90,24 @@ import java.util.List;
         }
 
         private void mostrarResultado(boolean ok) {
+            org.primefaces.PrimeFaces pf = org.primefaces.PrimeFaces.current();
+            FacesContext context = FacesContext.getCurrentInstance();
+
             if (ok) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Unidad guardada correctamente"));
-                unidad = new UnidadAprendizaje();
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exito", "Unidad guardada correctamente"));
+                this.unidad = new UnidadAprendizaje();
                 cargarLista();
+
+                pf.ajax().addCallbackParam("isSaved", true);
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Las horas deben de estar entre 0 y 4"));
+                pf.ajax().addCallbackParam("isSaved", false);
             }
+        }
+
+        public void onRowSelect(SelectEvent<UnidadAprendizaje> event) {
+            this.unidad = event.getObject();
         }
 
         public List<UnidadAprendizaje> getListaUnidades() {
@@ -81,9 +119,19 @@ import java.util.List;
         }
 
         public UnidadAprendizaje getUnidad() {
-            return unidad; }
+            if (unidad == null) {
+                unidad = new UnidadAprendizaje();
+            }
+            return unidad;
+        }
 
         public void setUnidad(UnidadAprendizaje unidad) {
-            this.unidad = unidad; }
+            this.unidad = unidad;
+        }
+
+        public void limpiarFormulario() {
+            this.unidad = new UnidadAprendizaje();
+        }
     }
+
 

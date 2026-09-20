@@ -85,24 +85,39 @@
                 </section>
             </main>
 
-            <!-- Asignaturas
+            <!-- Asignaturas -->
             <main class="main view-panel" id="view-asignaturas">
                 <header class="header">
                     <div class="header-titles">
                         <h1>Asignaturas</h1>
                         <p>Registro, Consulta y Modificación de las Asignaturas.</p>
                     </div>
-                    <p:commandButton id="btn-open-asignatura" styleClass="register-btn" type="button" onclick="PF('dlgAsignatura').show();">
-                            <span class="icon-box icon-box-16">
-                                <p:graphicImage url="resources/plus.svg" alt="" width="16" height="16" />
-                            </span>
-                        <span>Registrar Asignatura</span>
-                    </p:commandButton>
+                    <p:commandButton id="btn-open-asignatura" value="Registrar Asignatura" styleClass="register-btn" process="@this" actionListener="#{catalogoUI.limpiarFormulario()}" update=":mainForm:dialogoAsignaturaForm :mainForm:dlgAsignaturaHeader" oncomplete="PF('dlgAsignatura').show();" icon="pi pi-plus" />
                 </header>
                 <section class="body" aria-label="Contenido">
-                     Cargar tabla de Asignaturas
+                    <h2 style="padding: 0px 0px 10px;">Asignaturas Registradas</h2>
+                    <p:dataTable id="dtAsignaturas" value="#{catalogoUI.listaUnidades}" var="asig" selectionMode="single" selection="#{catalogoUI.unidad}" rowKey="#{asig.id}" responsiveLayout="scroll" emptyMessage="No hay asignaturas registradas actualmente.">
+
+                        <p:ajax event="rowDblselect" listener="#{catalogoUI.onRowSelect}" update=":mainForm:dialogoAsignaturaForm :mainForm:dlgAsignaturaHeader" oncomplete="PF('dlgAsignatura').show();" />
+
+                        <p:column headerText="ID">
+                            <h:outputText value="#{asig.id}" />
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{asig.nombre}" />
+                        </p:column>
+                        <p:column headerText="Horas Clase">
+                            <h:outputText value="#{asig.horasClase}" />
+                        </p:column>
+                        <p:column headerText="Horas Taller">
+                            <h:outputText value="#{asig.horasTaller}" />
+                        </p:column>
+                        <p:column headerText="Horas Laboratorio">
+                            <h:outputText value="#{asig.horasLaboratorio}" />
+                        </p:column>
+                    </p:dataTable>
                 </section>
-            </main> -->
+            </main>
 
             <!-- Asignación
             <main class="main view-panel" id="view-asignacion">
@@ -162,35 +177,44 @@
             </h:panelGroup>
         </p:dialog>
 
-        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-            <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" />
-        </p:confirmDialog>
+        <!-- Registro / Edición Asignatura -->
+        <p:dialog widgetVar="dlgAsignatura" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
 
-        <!-- Registro Asignatura
-        <p:dialog header="Registrar Asignatura" widgetVar="dlgAsignatura" modal="true" responsive="true" resizable="false">
-            <div class="modal-body">
-                <div class="form-group">
-                    <p:outputLabel for="asig-nombre" value="Nombre:" />
-                    <p:inputText id="asig-nombre" value="#{asignaturaBean.asignatura.nombre}" />
+            <f:facet name="header">
+                <h:outputText id="dlgAsignaturaHeader" value="#{catalogoUI.unidad != null and catalogoUI.unidad.id != null ? 'Editar / Consultar Unidad Academica' : 'Registrar Unidad Academica'}" />
+            </f:facet>
+
+            <h:panelGroup id="dialogoAsignaturaForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <p:outputLabel for="asig-nombre" value="Nombre:" />
+                        <p:inputText id="asig-nombre" value="#{catalogoUI.unidad.nombre}" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="asig-clase" value="Horas Clase:" />
+                        <p:spinner id="asig-clase" value="#{catalogoUI.unidad.horasClase}" min="0" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="asig-taller" value="Horas Taller:" />
+                        <p:spinner id="asig-taller" value="#{catalogoUI.unidad.horasTaller}" min="0" styleClass="custom-input" />
+                    </div>
+                    <div class="form-group">
+                        <p:outputLabel for="asig-lab" value="Horas Laboratorio:" />
+                        <p:spinner id="asig-lab" value="#{catalogoUI.unidad.horasLaboratorio}" min="0" styleClass="custom-input" />
+                    </div>
+
+                    <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.guardar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.actualizar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{catalogoUI.eliminar()}" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
+                            <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignatura?" icon="pi pi-alert" />
+                        </p:commandButton>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <p:outputLabel for="asig-clase" value="Horas Clase:" />
-                    <p:spinner id="asig-clase" value="#{asignaturaBean.asignatura.horasClase}" min="0" />
-                </div>
-                <div class="form-group">
-                    <p:outputLabel for="asig-taller" value="Horas Taller:" />
-                    <p:spinner id="asig-taller" value="#{asignaturaBean.asignatura.horasTaller}" min="0" />
-                </div>
-                <div class="form-group">
-                    <p:outputLabel for="asig-lab" value="Horas Laboratorio:" />
-                    <p:spinner id="asig-lab" value="#{asignaturaBean.asignatura.horasLab}" min="0" />
-                </div>
-                <div class="modal-footer">
-                    <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{asignaturaBean.guardar()}" update="messages" oncomplete="PF('dlgAsignatura').hide();" />
-                </div>
-            </div>
-        </p:dialog> -->
+            </h:panelGroup>
+        </p:dialog>
 
         <!-- 3. Asignacion Unidad
         <p:dialog header="Asignar horario del profesor" widgetVar="dlgAsignacion" modal="true" responsive="true" resizable="false">
@@ -235,6 +259,11 @@
                 </div>
             </div>
         </p:dialog> -->
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+            <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" />
+        </p:confirmDialog>
     </h:form>
 
     <script type="text/javascript" src="app.js"></script>
