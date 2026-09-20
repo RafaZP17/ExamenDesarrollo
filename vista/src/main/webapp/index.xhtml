@@ -284,12 +284,7 @@
                     </div>
 
                     <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <p:commandButton value="Asignar"
-                                         styleClass="modal-submit-btn"
-                                         actionListener="#{asignacionUI.guardarAsignacion()}"
-                                         process="dialogoAsignacionForm"
-                                         update="dialogoAsignacionForm messages :mainForm:dtAsignaciones"
-                                         oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
+                        <p:commandButton value="Asignar" styleClass="modal-submit-btn" actionListener="#{asignacionUI.guardarAsignacion()}" process="dialogoAsignacionForm" update="dialogoAsignacionForm messages :mainForm:dtAsignaciones" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
                     </div>
                 </div>
             </h:panelGroup>
