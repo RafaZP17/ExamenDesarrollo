@@ -19,6 +19,7 @@
     <h:form id="mainForm">
         <p:growl id="messages" showDetail="true" />
 
+
         <div class="app">
             <aside class="sidebar">
                 <div class="brand">
@@ -127,65 +128,71 @@
                         <h1>Asignación de Horarios por Profesor</h1>
                         <p>Lista de profesores en orden alfabético y sus calendarios de asignaciones.</p>
                     </div>
-                </header>
+                    <p:commandButton id="btn-open-asignacion"
+                                     value="Registrar Asignación"
+                                     styleClass="register-btn"
+                                     process="@this"
+                                     actionListener="#{asignacionUI.prepararNuevaAsignacion}"
+                                     update=":mainForm:dialogoAsignacionForm :mainForm:dlgAsignacionHeader"
+                                     oncomplete="PF('dlgAsignacion').show();"
+                                     icon="pi pi-plus" />                </header>
 
                 <section class="body" aria-label="Contenido">
-                    <!-- Acordeón o listado desplegable de profesores -->
-                    <p:accordionPanel value="#{asignacionUI.listaProfesoresOrdenados}" var="profesor" multiple="true" cache="false">
-                        <p:tab title="#{profesor.nombre} #{profesor.apellidoPaterno} #{profesor.apellidoMaterno}">
+                    <p:outputPanel id="panelCalendarios">
+                        <p:accordionPanel value="#{asignacionUI.listaProfesoresOrdenados}" var="profesor" multiple="true" cache="false">
+                            <p:tab title="#{profesor.nombre} #{profesor.apellidoPaterno} #{profesor.apellidoMaterno}">
 
-                            <!-- Estructura del calendario -->
-                            <div class="calendar-card" style="display: flex; flex-direction: column; width: 100%; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; background: #fff;">
-                                <div class="table-responsive">
-                                    <!-- Cabecera de días -->
-                                    <div class="d-flex flex-row calendar-header text-center fw-bold text-muted small" style="display: flex !important;">
-                                        <div class="time-col p-3" style="width: 70px; min-width: 70px;">HORA</div>
-                                        <div class="col p-3" style="flex: 1; text-align: center;">LUNES</div>
-                                        <div class="col p-3" style="flex: 1; text-align: center;">MARTES</div>
-                                        <div class="col p-3" style="flex: 1; text-align: center;">MIÉRCOLES</div>
-                                        <div class="col p-3" style="flex: 1; text-align: center;">JUEVES</div>
-                                        <div class="col p-3" style="flex: 1; text-align: center;">VIERNES</div>
-                                        <div class="col p-3" style="flex: 1; text-align: center;">SÁBADO</div>
-                                    </div>
-
-                                    <!-- Cuerpo del Calendario (Horas y Días) -->
-                                    <div class="d-flex flex-row w-100" id="calendar-grid" style="display: flex !important;">
-                                        <!-- Etiquetas de Horas de 07:00 a 22:00 -->
-                                        <!-- Etiquetas de Horas de 07:00 a 20:00 -->
-                                        <div id="time-labels-container" class="time-col" style="width: 70px; min-width: 70px; flex: 0 0 70px; background: #f8f9fa; border-right: 1px solid #dee2e6;">
-                                            <ui:repeat value="#{asignacionUI.horasEstructura}" var="h">
-                                                <div class="hour-row d-flex align-items-center justify-content-center text-muted small fw-bold" style="height: 70px; border-bottom: 1px solid #f1f3f5;">
-                                                    #{h &lt; 10 ? '0' : ''}#{h}:00
-                                                </div>
-                                            </ui:repeat>
+                                <div class="calendar-card" style="display: flex; flex-direction: column; width: 100%; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; background: #fff;">
+                                    <div class="table-responsive">
+                                        <div class="d-flex flex-row calendar-header text-center fw-bold text-muted small" style="display: flex !important;">
+                                            <div class="time-col p-3" style="width: 70px; min-width: 70px;">HORA</div>
+                                            <div class="col p-3" style="flex: 1; text-align: center;">LUNES</div>
+                                            <div class="col p-3" style="flex: 1; text-align: center;">MARTES</div>
+                                            <div class="col p-3" style="flex: 1; text-align: center;">MIÉRCOLES</div>
+                                            <div class="col p-3" style="flex: 1; text-align: center;">JUEVES</div>
+                                            <div class="col p-3" style="flex: 1; text-align: center;">VIERNES</div>
+                                            <div class="col p-3" style="flex: 1; text-align: center;">SÁBADO</div>
                                         </div>
 
-                                        <!-- Contenedor de Días en paralelo -->
-                                        <div class="d-flex flex-row flex-grow-1 p-0" id="days-container" style="display: flex !important; width: 100%;">
-                                            <ui:repeat value="#{asignacionUI.obtenerDiasSemana}" var="diaIndex">
-                                                <div class="col day-col position-relative p-0" id="day-#{diaIndex}" style="flex: 1 !important; min-width: 120px; border-right: 1px solid #dee2e6;">
-                                                    <!-- Filas de fondo de la hora -->
-                                                    <ui:repeat value="#{asignacionUI.horasEstructura}" var="h">
-                                                        <div class="hour-row" style="height: 70px; border-bottom: 1px solid #f1f3f5;"></div>
-                                                    </ui:repeat>
+                                        <div class="d-flex flex-row w-100" id="calendar-grid" style="display: flex !important;">
+                                            <div id="time-labels-container" class="time-col" style="width: 70px; min-width: 70px; flex: 0 0 70px; background: #f8f9fa; border-right: 1px solid #dee2e6;">
+                                                <ui:repeat value="#{asignacionUI.horasEstructura}" var="h">
+                                                    <div class="hour-row d-flex align-items-center justify-content-center text-muted small fw-bold" style="height: 70px; border-bottom: 1px solid #f1f3f5;">
+                                                        #{h &lt; 10 ? '0' : ''}#{h}:00
+                                                    </div>
+                                                </ui:repeat>
+                                            </div>
 
-                                                    <!-- Bloques de materias asignadas -->
-                                                    <ui:repeat value="#{asignacionUI.obtenerAsignacionesPorProfesorYDia(profesor.idProfesor, diaIndex)}" var="asig">
-                                                        <div class="subject-block" style="position: absolute; top: #{asignacionUI.calcularTop(asig.horaInicio)}px; height: #{asignacionUI.calcularHeight(asig.horaInicio, asig.horaFin)}px; width: calc(100% - 8px); left: 4px; background-color: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1; padding: 4px; box-sizing: border-box; border-radius: 4px; z-index: 5;">
-                                                            <div class="fw-bold mb-1" style="line-height: 1.1; font-size: 0.75rem;">#{asig.unidadAprendizaje.nombre}</div>
-                                                            <div class="d-flex justify-content-between align-items-center w-100 mt-auto" style="font-size: 0.65rem;">
-                                                                <span class="fw-medium">#{asig.horaInicio} - #{asig.horaFin}</span>
-                                                            </div>
-                                                        </div>
-                                                    </ui:repeat>
-                                                </div>
-                                            </ui:repeat>
+                                            <div class="d-flex flex-row flex-grow-1 p-0" id="days-container" style="display: flex !important; width: 100%;">
+                                                <ui:repeat value="#{asignacionUI.obtenerDiasSemana}" var="diaIndex">
+                                                    <div class="col day-col position-relative p-0" id="day-#{diaIndex}" style="flex: 1 !important; min-width: 120px; border-right: 1px solid #dee2e6;">
+                                                        <ui:repeat value="#{asignacionUI.horasEstructura}" var="h">
+                                                            <div class="hour-row" style="height: 70px; border-bottom: 1px solid #f1f3f5;"></div>
+                                                        </ui:repeat>
+
+                                                        <ui:repeat value="#{asignacionUI.obtenerAsignacionesPorProfesorYDia(profesor.idProfesor, diaIndex)}" var="asig">
+                                                            <p:commandLink styleClass="subject-block"
+                                                                           style="position: absolute; top: #{asignacionUI.calcularTop(asig.horaInicio)}px; height: #{asignacionUI.calcularHeight(asig.horaInicio, asig.horaFin)}px; width: calc(100% - 8px); left: 4px; background-color: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1; padding: 4px; box-sizing: border-box; border-radius: 4px; z-index: 5; text-decoration: none; display: block; cursor: pointer;"
+                                                                           actionListener="#{asignacionUI.onAsignacionRowSelect(asig)}"
+                                                                           process="@this"
+                                                                           update=":mainForm:dialogoAsignacionForm :mainForm:dlgAsignacionHeader"
+                                                                           oncomplete="PF('dlgAsignacion').show();">
+
+                                                                <div class="fw-bold mb-1" style="line-height: 1.1; font-size: 0.75rem;">#{asig.unidadAprendizaje.nombre}</div>
+                                                                <div class="d-flex justify-content-between align-items-center w-100 mt-auto" style="font-size: 0.65rem;">
+                                                                    <span class="fw-medium">#{asig.horaInicio} - #{asig.horaFin}</span>
+                                                                </div>
+                                                            </p:commandLink>
+                                                        </ui:repeat>
+                                                    </div>
+                                                </ui:repeat>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </p:tab>
-                    </p:accordionPanel>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:outputPanel>
                 </section>
             </main>
         </div>
@@ -216,11 +223,11 @@
                         <p:inputText id="prof-rfc" value="#{profesorBean.profesor.rfc}" styleClass="custom-input" />
                     </div>
                     <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" process="dialogoProfesorForm" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{profesorBean.guardarProfesor()}" process="dialogoProfesorForm" update=":mainForm:dtProfesores :mainForm:panelCalendarios dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
 
-                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{profesorBean.actualizarProfesor()}" process="dialogoProfesorForm" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{profesorBean.actualizarProfesor()}" process="dialogoProfesorForm" update=":mainForm:dtProfesores :mainForm:panelCalendarios dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
 
-                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{profesorBean.eliminarProfesor()}" process="@this" update=":mainForm:dtProfesores dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{profesorBean.eliminarProfesor()}" process="@this" update=":mainForm:dtProfesores :mainForm:panelCalendarios dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar este profesor?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>
@@ -255,11 +262,11 @@
                     </div>
 
                     <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.guardar()}" process="dialogoAsignaturaForm" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.guardar()}" process="dialogoAsignaturaForm" update=":mainForm:dtAsignaturas :mainForm:panelCalendarios dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
 
-                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.actualizar()}" process="dialogoAsignaturaForm" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.actualizar()}" process="dialogoAsignaturaForm" update=":mainForm:dtAsignaturas :mainForm:panelCalendarios dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
 
-                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{catalogoUI.eliminar()}" process="@this" update=":mainForm:dtAsignaturas dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{catalogoUI.eliminar()}" process="@this" update=":mainForm:dtAsignaturas :mainForm:panelCalendarios dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignatura?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>
@@ -270,7 +277,7 @@
         <!-- Asignacion Unidad -->
         <p:dialog widgetVar="dlgAsignacion" modal="false" draggable="true" resizable="false" width="580px" styleClass="custom-dialog">
             <f:facet name="header">
-                <h:outputText value="Asignar horario del profesor" />
+                <h:outputText id="dlgAsignacionHeader" value="#{asignacionUI.idAsignacionSel != null ? 'Editar / Consultar Asignación' : 'Registrar Asignación de Horario'}" />
             </f:facet>
 
             <h:panelGroup id="dialogoAsignacionForm">
@@ -300,6 +307,7 @@
                             <f:selectItem itemLabel="Miércoles" itemValue="Miércoles" />
                             <f:selectItem itemLabel="Jueves" itemValue="Jueves" />
                             <f:selectItem itemLabel="Viernes" itemValue="Viernes" />
+                            <f:selectItem itemLabel="Sábado" itemValue="Sábado" />
                         </p:selectOneMenu>
                     </div>
 
@@ -314,12 +322,31 @@
                     </div>
 
                     <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <p:commandButton value="Asignar"
+                        <p:commandButton value="Registrar"
                                          styleClass="modal-submit-btn"
                                          actionListener="#{asignacionUI.guardarAsignacion()}"
                                          process="dialogoAsignacionForm"
-                                         update="dialogoAsignacionForm messages :mainForm:dtAsignaciones"
+                                         update="dialogoAsignacionForm messages :mainForm:panelCalendarios"
+                                         rendered="#{asignacionUI.idAsignacionSel == null}"
                                          oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
+
+                        <p:commandButton value="Actualizar"
+                                         styleClass="modal-submit-btn"
+                                         actionListener="#{asignacionUI.actualizarAsignacion()}"
+                                         process="dialogoAsignacionForm"
+                                         update="dialogoAsignacionForm messages :mainForm:panelCalendarios"
+                                         rendered="#{asignacionUI.idAsignacionSel != null}"
+                                         oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
+
+                        <p:commandButton value="Eliminar"
+                                         styleClass="ui-button-danger modal-submit-btn"
+                                         actionListener="#{asignacionUI.eliminarAsignacion()}"
+                                         process="@this"
+                                         update="dialogoAsignacionForm messages :mainForm:panelCalendarios"
+                                         rendered="#{asignacionUI.idAsignacionSel != null}"
+                                         oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }">
+                            <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignación de horario?" icon="pi pi-alert" />
+                        </p:commandButton>
                     </div>
                 </div>
             </h:panelGroup>

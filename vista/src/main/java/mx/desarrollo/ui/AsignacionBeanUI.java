@@ -26,6 +26,7 @@ public class AsignacionBeanUI implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer idAsignacionSel; // ID para saber si estamos editando
     private Integer idProfesorSel;
     private Integer idUnidadSel;
     private String diaSel;
@@ -55,19 +56,18 @@ public class AsignacionBeanUI implements Serializable {
         this.listaAsignaciones = delegateAsignacion.obtenerTodas();
     }
 
+    public void prepararNuevaAsignacion() {
+        limpiarFormulario();
+        this.listaProfesores = delegateProfesor.obtenerListaProfesores();
+        this.listaUnidades = delegateUnidad.obtenerTodas();
+    }
+
     public void guardarAsignacion() {
         FacesContext context = FacesContext.getCurrentInstance();
         PrimeFaces pf = PrimeFaces.current();
 
         try {
-            if (idProfesorSel == null || idUnidadSel == null || diaSel == null
-                    || horaInicio == null || horaFin == null) {
-                throw new Exception("Todos los campos son obligatorios.");
-            }
-
-            if (!horaInicio.isBefore(horaFin)) {
-                throw new Exception("La hora de inicio debe ser anterior a la hora de fin.");
-            }
+            validarFormulario();
 
             Profesor prof = new Profesor();
             prof.setIdProfesor(idProfesorSel);
@@ -98,16 +98,104 @@ public class AsignacionBeanUI implements Serializable {
         }
     }
 
+    public void actualizarAsignacion() {
+        PrimeFaces pf = PrimeFaces.current();
+        try {
+            if (idAsignacionSel == null) {
+                throw new Exception("No se ha seleccionado ninguna asignación para actualizar.");
+            }
+            validarFormulario();
+
+            Profesor prof = new Profesor();
+            prof.setIdProfesor(idProfesorSel);
+
+            UnidadAprendizaje uni = new UnidadAprendizaje();
+            uni.setId(idUnidadSel);
+
+            ProfesorUnidad asignacion = new ProfesorUnidad();
+            asignacion.setIdAsignacion(idAsignacionSel);
+            asignacion.setProfesor(prof);
+            asignacion.setUnidadAprendizaje(uni);
+            asignacion.setDia(diaSel);
+            asignacion.setHoraInicio(horaInicio);
+            asignacion.setHoraFin(horaFin);
+
+            delegateAsignacion.actualizarAsignacion(asignacion);
+            this.listaAsignaciones = delegateAsignacion.obtenerTodas();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Asignación actualizada correctamente."));
+
+            limpiarFormulario();
+            pf.ajax().addCallbackParam("isSaved", true);
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de Actualización", e.getMessage()));
+            pf.ajax().addCallbackParam("isSaved", false);
+        }
+    }
+
+    public void eliminarAsignacion() {
+        PrimeFaces pf = PrimeFaces.current();
+        try {
+            if (idAsignacionSel == null) {
+                throw new Exception("No se ha seleccionado ninguna asignación para eliminar.");
+            }
+
+            delegateAsignacion.eliminarAsignacion(idAsignacionSel);
+            this.listaAsignaciones = delegateAsignacion.obtenerTodas();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Asignación eliminada correctamente."));
+
+            limpiarFormulario();
+            pf.ajax().addCallbackParam("isSaved", true);
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al Eliminar", e.getMessage()));
+            pf.ajax().addCallbackParam("isSaved", false);
+        }
+    }
+
+    private void validarFormulario() throws Exception {
+        if (idProfesorSel == null || idUnidadSel == null || diaSel == null
+                || horaInicio == null || horaFin == null) {
+            throw new Exception("Todos los campos son obligatorios.");
+        }
+
+        if (!horaInicio.isBefore(horaFin)) {
+            throw new Exception("La hora de inicio debe ser anterior a la hora de fin.");
+        }
+    }
+
+    public void onAsignacionRowSelect(ProfesorUnidad asig) {
+        if (asig != null) {
+            this.idAsignacionSel = asig.getIdAsignacion();
+            if (asig.getProfesor() != null) {
+                this.idProfesorSel = asig.getProfesor().getIdProfesor();
+            }
+            if (asig.getUnidadAprendizaje() != null) {
+                this.idUnidadSel = asig.getUnidadAprendizaje().getId();
+            }
+            this.diaSel = asig.getDia();
+            this.horaInicio = asig.getHoraInicio();
+            this.horaFin = asig.getHoraFin();
+        }
+
+        // Recargar listas al seleccionar mediante doble clic
+        this.listaProfesores = delegateProfesor.obtenerListaProfesores();
+        this.listaUnidades = delegateUnidad.obtenerTodas();
+    }
+
     public void limpiarFormulario() {
+        this.idAsignacionSel = null;
         this.idProfesorSel = null;
         this.idUnidadSel = null;
         this.diaSel = null;
         this.horaInicio = null;
         this.horaFin = null;
-    }
-
-    public List<ProfesorUnidad> obtenerAsignacionesProfesor(Integer idProfesor) {
-        return delegateAsignacion.obtenerAsignacionesPorProfesor(idProfesor);
     }
 
     public int calcularTop(LocalTime horaInicio) {
@@ -153,18 +241,28 @@ public class AsignacionBeanUI implements Serializable {
     }
 
     public List<ProfesorUnidad> obtenerAsignacionesPorProfesorYDia(Integer idProfesor, int diaIndex) {
-        List<ProfesorUnidad> delProfesor = delegateAsignacion.obtenerAsignacionesPorProfesor(idProfesor);
-        List<ProfesorUnidad> filtradas = new ArrayList<>();
+        if (delegateAsignacion != null) {
+            this.listaAsignaciones = delegateAsignacion.obtenerTodas();
+        }
 
-        if (delProfesor != null) {
-            for (ProfesorUnidad a : delProfesor) {
-                if (obtenerDiaIndex(a.getDia()) == diaIndex) {
-                    filtradas.add(a);
+        List<ProfesorUnidad> filtradas = new ArrayList<>();
+        if (listaAsignaciones != null) {
+            for (ProfesorUnidad a : listaAsignaciones) {
+                if (a.getProfesor() != null && a.getProfesor().getIdProfesor().equals(idProfesor)) {
+                    // Corrección añadida aquí (getUnidadAprendizaje().getId())
+                    if (a.getUnidadAprendizaje() != null && a.getUnidadAprendizaje().getId() != null) {
+                        if (obtenerDiaIndex(a.getDia()) == diaIndex) {
+                            filtradas.add(a);
+                        }
+                    }
                 }
             }
         }
         return filtradas;
     }
+
+    public Integer getIdAsignacionSel() { return idAsignacionSel; }
+    public void setIdAsignacionSel(Integer idAsignacionSel) { this.idAsignacionSel = idAsignacionSel; }
 
     public Integer getIdProfesorSel() { return idProfesorSel; }
     public void setIdProfesorSel(Integer idProfesorSel) { this.idProfesorSel = idProfesorSel; }

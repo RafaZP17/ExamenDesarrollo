@@ -70,4 +70,45 @@ public class ProfesorUnidadDAO {
             em.close();
         }
     }
+
+    /**
+     * Actualiza una asignación existente en la base de datos.
+     */
+    public void actualizar(ProfesorUnidad asignacion) throws Exception {
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(asignacion);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction() != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * Elimina una asignación a partir de su ID.
+     */
+    public void eliminar(int idAsignacion) {
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            ProfesorUnidad asignacion = em.find(ProfesorUnidad.class, idAsignacion);
+            if (asignacion != null) {
+                em.remove(asignacion);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction() != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
 }
