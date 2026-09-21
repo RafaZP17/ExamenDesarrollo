@@ -449,3 +449,28 @@ button#mainForm\:Sigt-outBttn {
     display: flex;
     flex-direction: column;
 }
+
+/* Forzar que los contenedores del calendario respeten Flexbox frente a PrimeFaces */
+#calendar-grid,
+.calendar-header,
+#days-container {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+#time-labels-container {
+    flex: 0 0 70px !important;
+    width: 70px !important;
+    min-width: 70px !important;
+}
+
+.day-col {
+    flex: 1 !important;
+    min-width: 120px !important;
+    position: relative !important;
+}
+
+.hour-row {
+    height: 70px !important;
+    box-sizing: border-box !important;
+}

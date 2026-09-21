@@ -1,7 +1,6 @@
 package mx.desarrollo.ui;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.ejb.Local;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -12,19 +11,20 @@ import mx.desarrollo.delegate.DelegateUnidadAprendizaje;
 import mx.desarrollo.entity.Profesor;
 import mx.desarrollo.entity.ProfesorUnidad;
 import mx.desarrollo.entity.UnidadAprendizaje;
-import mx.desarrollo.integration.ServiceFacadeLocator;
 import org.primefaces.PrimeFaces;
 
 import java.io.Serializable;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 @Named("asignacionUI")
 @ViewScoped
 public class AsignacionBeanUI implements Serializable {
 
-    private  static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private Integer idProfesorSel;
     private Integer idUnidadSel;
@@ -133,6 +133,37 @@ public class AsignacionBeanUI implements Serializable {
             case "sábado": case "sabado": return 5;
             default: return 0;
         }
+    }
+
+    public List<Profesor> getListaProfesoresOrdenados() {
+        List<Profesor> profesores = delegateProfesor.obtenerListaProfesores();
+        if (profesores != null) {
+            profesores.sort(Comparator.comparing(Profesor::getApellidoPaterno, Comparator.nullsLast(String::compareTo))
+                    .thenComparing(Profesor::getNombre, Comparator.nullsLast(String::compareTo)));
+        }
+        return profesores;
+    }
+
+    public List<Integer> getObtenerDiasSemana() {
+        return Arrays.asList(0, 1, 2, 3, 4, 5);
+    }
+
+    public List<Integer> getHorasEstructura() {
+        return Arrays.asList(7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+    }
+
+    public List<ProfesorUnidad> obtenerAsignacionesPorProfesorYDia(Integer idProfesor, int diaIndex) {
+        List<ProfesorUnidad> delProfesor = delegateAsignacion.obtenerAsignacionesPorProfesor(idProfesor);
+        List<ProfesorUnidad> filtradas = new ArrayList<>();
+
+        if (delProfesor != null) {
+            for (ProfesorUnidad a : delProfesor) {
+                if (obtenerDiaIndex(a.getDia()) == diaIndex) {
+                    filtradas.add(a);
+                }
+            }
+        }
+        return filtradas;
     }
 
     public Integer getIdProfesorSel() { return idProfesorSel; }

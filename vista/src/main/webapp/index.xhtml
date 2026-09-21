@@ -120,42 +120,72 @@
                 </section>
             </main>
 
-            <!-- Asignación -->
+            <!-- Asignacion -->
             <main class="main view-panel" id="view-asignacion">
                 <header class="header">
                     <div class="header-titles">
-                        <h1>Asignación</h1>
-                        <p>Gestión de horarios por profesor.</p>
+                        <h1>Asignación de Horarios por Profesor</h1>
+                        <p>Lista de profesores en orden alfabético y sus calendarios de asignaciones.</p>
                     </div>
-                    <p:commandButton id="btn-open-asignacion" value="Nueva Asignación" styleClass="register-btn" process="@this" actionListener="#{asignacionUI.limpiarFormulario()}" update=":mainForm:dialogoAsignacionForm" oncomplete="PF('dlgAsignacion').show();" icon="pi pi-plus" />
                 </header>
 
                 <section class="body" aria-label="Contenido">
-                    <h2 style="padding: 0px 0px 10px;">Listado de Asignaciones</h2>
+                    <!-- Acordeón o listado desplegable de profesores -->
+                    <p:accordionPanel value="#{asignacionUI.listaProfesoresOrdenados}" var="profesor" multiple="true" cache="false">
+                        <p:tab title="#{profesor.nombre} #{profesor.apellidoPaterno} #{profesor.apellidoMaterno}">
 
-                    <p:outputPanel id="panelAsignaciones">
-                        <p:messages for="msgAsignacion" showDetail="true" closable="true"/>
+                            <!-- Estructura del calendario -->
+                            <div class="calendar-card" style="display: flex; flex-direction: column; width: 100%; border: 1px solid #dee2e6; border-radius: 8px; overflow: hidden; background: #fff;">
+                                <div class="table-responsive">
+                                    <!-- Cabecera de días -->
+                                    <div class="d-flex flex-row calendar-header text-center fw-bold text-muted small" style="display: flex !important;">
+                                        <div class="time-col p-3" style="width: 70px; min-width: 70px;">HORA</div>
+                                        <div class="col p-3" style="flex: 1; text-align: center;">LUNES</div>
+                                        <div class="col p-3" style="flex: 1; text-align: center;">MARTES</div>
+                                        <div class="col p-3" style="flex: 1; text-align: center;">MIÉRCOLES</div>
+                                        <div class="col p-3" style="flex: 1; text-align: center;">JUEVES</div>
+                                        <div class="col p-3" style="flex: 1; text-align: center;">VIERNES</div>
+                                        <div class="col p-3" style="flex: 1; text-align: center;">SÁBADO</div>
+                                    </div>
 
-                        <!-- Tabla para mostrar las asignaciones registradas -->
-                        <p:dataTable id="dtAsignaciones" value="#{asignacionUI.listaAsignaciones}" var="asig" responsiveLayout="scroll" emptyMessage="No hay asignaciones registradas actualmente.">
-                            <p:column headerText="Profesor">
-                                <!-- Ajusta los nombres de las propiedades según tu entidad (ej. asig.profesor.nombre) -->
-                                <h:outputText value="#{asig.profesor.nombre} #{asig.profesor.apellidoPaterno}" />
-                            </p:column>
-                            <p:column headerText="Asignatura">
-                                <h:outputText value="#{asig.unidadAprendizaje.nombre}" />
-                            </p:column>
-                            <p:column headerText="Día">
-                                <h:outputText value="#{asig.dia}" />
-                            </p:column>
-                            <p:column headerText="Hora Inicio">
-                                <h:outputText value="#{asig.horaInicio}" />
-                            </p:column>
-                            <p:column headerText="Hora Fin">
-                                <h:outputText value="#{asig.horaFin}" />
-                            </p:column>
-                        </p:dataTable>
-                    </p:outputPanel>
+                                    <!-- Cuerpo del Calendario (Horas y Días) -->
+                                    <div class="d-flex flex-row w-100" id="calendar-grid" style="display: flex !important;">
+                                        <!-- Etiquetas de Horas de 07:00 a 22:00 -->
+                                        <!-- Etiquetas de Horas de 07:00 a 20:00 -->
+                                        <div id="time-labels-container" class="time-col" style="width: 70px; min-width: 70px; flex: 0 0 70px; background: #f8f9fa; border-right: 1px solid #dee2e6;">
+                                            <ui:repeat value="#{asignacionUI.horasEstructura}" var="h">
+                                                <div class="hour-row d-flex align-items-center justify-content-center text-muted small fw-bold" style="height: 70px; border-bottom: 1px solid #f1f3f5;">
+                                                    #{h &lt; 10 ? '0' : ''}#{h}:00
+                                                </div>
+                                            </ui:repeat>
+                                        </div>
+
+                                        <!-- Contenedor de Días en paralelo -->
+                                        <div class="d-flex flex-row flex-grow-1 p-0" id="days-container" style="display: flex !important; width: 100%;">
+                                            <ui:repeat value="#{asignacionUI.obtenerDiasSemana}" var="diaIndex">
+                                                <div class="col day-col position-relative p-0" id="day-#{diaIndex}" style="flex: 1 !important; min-width: 120px; border-right: 1px solid #dee2e6;">
+                                                    <!-- Filas de fondo de la hora -->
+                                                    <ui:repeat value="#{asignacionUI.horasEstructura}" var="h">
+                                                        <div class="hour-row" style="height: 70px; border-bottom: 1px solid #f1f3f5;"></div>
+                                                    </ui:repeat>
+
+                                                    <!-- Bloques de materias asignadas -->
+                                                    <ui:repeat value="#{asignacionUI.obtenerAsignacionesPorProfesorYDia(profesor.idProfesor, diaIndex)}" var="asig">
+                                                        <div class="subject-block" style="position: absolute; top: #{asignacionUI.calcularTop(asig.horaInicio)}px; height: #{asignacionUI.calcularHeight(asig.horaInicio, asig.horaFin)}px; width: calc(100% - 8px); left: 4px; background-color: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1; padding: 4px; box-sizing: border-box; border-radius: 4px; z-index: 5;">
+                                                            <div class="fw-bold mb-1" style="line-height: 1.1; font-size: 0.75rem;">#{asig.unidadAprendizaje.nombre}</div>
+                                                            <div class="d-flex justify-content-between align-items-center w-100 mt-auto" style="font-size: 0.65rem;">
+                                                                <span class="fw-medium">#{asig.horaInicio} - #{asig.horaFin}</span>
+                                                            </div>
+                                                        </div>
+                                                    </ui:repeat>
+                                                </div>
+                                            </ui:repeat>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:tab>
+                    </p:accordionPanel>
                 </section>
             </main>
         </div>
@@ -304,4 +334,3 @@
     <script type="text/javascript" src="app.js"></script>
 </h:body>
 </html>
-
