@@ -128,14 +128,7 @@
                         <h1>Asignación de Horarios por Profesor</h1>
                         <p>Lista de profesores en orden alfabético y sus calendarios de asignaciones.</p>
                     </div>
-                    <p:commandButton id="btn-open-asignacion"
-                                     value="Registrar Asignación"
-                                     styleClass="register-btn"
-                                     process="@this"
-                                     actionListener="#{asignacionUI.prepararNuevaAsignacion}"
-                                     update=":mainForm:dialogoAsignacionForm :mainForm:dlgAsignacionHeader"
-                                     oncomplete="PF('dlgAsignacion').show();"
-                                     icon="pi pi-plus" />                </header>
+                    <p:commandButton id="btn-open-asignacion" value="Registrar Asignación" styleClass="register-btn" process="@this" actionListener="#{asignacionUI.prepararNuevaAsignacion}" update=":mainForm:dialogoAsignacionForm :mainForm:dlgAsignacionHeader" oncomplete="PF('dlgAsignacion').show();" icon="pi pi-plus" />                </header>
 
                 <section class="body" aria-label="Contenido">
                     <p:outputPanel id="panelCalendarios">
@@ -171,12 +164,7 @@
                                                         </ui:repeat>
 
                                                         <ui:repeat value="#{asignacionUI.obtenerAsignacionesPorProfesorYDia(profesor.idProfesor, diaIndex)}" var="asig">
-                                                            <p:commandLink styleClass="subject-block"
-                                                                           style="position: absolute; top: #{asignacionUI.calcularTop(asig.horaInicio)}px; height: #{asignacionUI.calcularHeight(asig.horaInicio, asig.horaFin)}px; width: calc(100% - 8px); left: 4px; background-color: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1; padding: 4px; box-sizing: border-box; border-radius: 4px; z-index: 5; text-decoration: none; display: block; cursor: pointer;"
-                                                                           actionListener="#{asignacionUI.onAsignacionRowSelect(asig)}"
-                                                                           process="@this"
-                                                                           update=":mainForm:dialogoAsignacionForm :mainForm:dlgAsignacionHeader"
-                                                                           oncomplete="PF('dlgAsignacion').show();">
+                                                            <p:commandLink styleClass="subject-block" style="position: absolute; top: #{asignacionUI.calcularTop(asig.horaInicio)}px; height: #{asignacionUI.calcularHeight(asig.horaInicio, asig.horaFin)}px; width: calc(100% - 8px); left: 4px; background-color: #e3f2fd; border: 1px solid #90caf9; color: #0d47a1; padding: 4px; box-sizing: border-box; border-radius: 4px; z-index: 5; text-decoration: none; display: block; cursor: pointer;" actionListener="#{asignacionUI.onAsignacionRowSelect(asig)}" process="@this" update=":mainForm:dialogoAsignacionForm :mainForm:dlgAsignacionHeader" oncomplete="PF('dlgAsignacion').show();">
 
                                                                 <div class="fw-bold mb-1" style="line-height: 1.1; font-size: 0.75rem;">#{asig.unidadAprendizaje.nombre}</div>
                                                                 <div class="d-flex justify-content-between align-items-center w-100 mt-auto" style="font-size: 0.65rem;">
@@ -284,7 +272,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <p:outputLabel for="asig-profesor" value="Nombre del profesor:" />
-                        <p:selectOneMenu id="asig-profesor" value="#{asignacionUI.idProfesorSel}" styleClass="select-input" required="true">
+                        <p:selectOneMenu id="asig-profesor" value="#{asignacionUI.idProfesorSel}" styleClass="select-input" >
                             <f:selectItem itemLabel="Seleccione un profesor" itemValue="" noSelectionOption="true" />
                             <f:selectItems value="#{asignacionUI.listaProfesores}" var="p" itemLabel="#{p.nombre} #{p.apellidoPaterno}" itemValue="#{p.idProfesor}" />
                         </p:selectOneMenu>
@@ -292,7 +280,7 @@
 
                     <div class="form-group">
                         <p:outputLabel for="asig-materia" value="Asignatura:" />
-                        <p:selectOneMenu id="asig-materia" value="#{asignacionUI.idUnidadSel}" styleClass="select-input" required="true">
+                        <p:selectOneMenu id="asig-materia" value="#{asignacionUI.idUnidadSel}" styleClass="select-input" >
                             <f:selectItem itemLabel="Seleccione una asignatura" itemValue="" noSelectionOption="true" />
                             <f:selectItems value="#{asignacionUI.listaUnidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u.id}" />
                         </p:selectOneMenu>
@@ -300,7 +288,7 @@
 
                     <div class="form-group">
                         <p:outputLabel for="asig-dia" value="Día de la clase:" />
-                        <p:selectOneMenu id="asig-dia" value="#{asignacionUI.diaSel}" styleClass="select-input" required="true">
+                        <p:selectOneMenu id="asig-dia" value="#{asignacionUI.diaSel}" styleClass="select-input" >
                             <f:selectItem itemLabel="Seleccione un día" itemValue="" noSelectionOption="true" />
                             <f:selectItem itemLabel="Lunes" itemValue="Lunes" />
                             <f:selectItem itemLabel="Martes" itemValue="Martes" />
@@ -312,39 +300,21 @@
                     </div>
 
                     <div class="form-group">
-                        <p:outputLabel for="asig-inicio" value="Hora Inicio (HH:mm):" />
-                        <p:datePicker id="asig-inicio" value="#{asignacionUI.horaInicio}" timeOnly="true" pattern="HH:mm" timeControlType="select" required="true" />
+                        <p:outputLabel for="asig-inicio" value="Hora Inicio:" />
+                        <p:datePicker id="asig-inicio" value="#{asignacionUI.horaInicio}" timeOnly="true" pattern="HH:mm" timeControlType="select" />
                     </div>
 
                     <div class="form-group">
-                        <p:outputLabel for="asig-fin" value="Hora Fin (HH:mm):" />
-                        <p:datePicker id="asig-fin" value="#{asignacionUI.horaFin}" timeOnly="true" pattern="HH:mm" timeControlType="select" required="true" />
+                        <p:outputLabel for="asig-fin" value="Hora Fin:" />
+                        <p:datePicker id="asig-fin" value="#{asignacionUI.horaFin}" timeOnly="true" pattern="HH:mm" timeControlType="select" />
                     </div>
 
                     <div class="modal-footer" style="display: flex; gap: 10px; justify-content: flex-end;">
-                        <p:commandButton value="Registrar"
-                                         styleClass="modal-submit-btn"
-                                         actionListener="#{asignacionUI.guardarAsignacion()}"
-                                         process="dialogoAsignacionForm"
-                                         update="dialogoAsignacionForm messages :mainForm:panelCalendarios"
-                                         rendered="#{asignacionUI.idAsignacionSel == null}"
-                                         oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
+                        <p:commandButton value="Registrar" styleClass="modal-submit-btn" actionListener="#{asignacionUI.guardarAsignacion()}" process="dialogoAsignacionForm" update="dialogoAsignacionForm messages :mainForm:panelCalendarios" rendered="#{asignacionUI.idAsignacionSel == null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
 
-                        <p:commandButton value="Actualizar"
-                                         styleClass="modal-submit-btn"
-                                         actionListener="#{asignacionUI.actualizarAsignacion()}"
-                                         process="dialogoAsignacionForm"
-                                         update="dialogoAsignacionForm messages :mainForm:panelCalendarios"
-                                         rendered="#{asignacionUI.idAsignacionSel != null}"
-                                         oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
+                        <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{asignacionUI.actualizarAsignacion()}" process="dialogoAsignacionForm" update="dialogoAsignacionForm messages :mainForm:panelCalendarios" rendered="#{asignacionUI.idAsignacionSel != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
 
-                        <p:commandButton value="Eliminar"
-                                         styleClass="ui-button-danger modal-submit-btn"
-                                         actionListener="#{asignacionUI.eliminarAsignacion()}"
-                                         process="@this"
-                                         update="dialogoAsignacionForm messages :mainForm:panelCalendarios"
-                                         rendered="#{asignacionUI.idAsignacionSel != null}"
-                                         oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{asignacionUI.eliminarAsignacion()}" process="@this" update="dialogoAsignacionForm messages :mainForm:panelCalendarios" rendered="#{asignacionUI.idAsignacionSel != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignación de horario?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>

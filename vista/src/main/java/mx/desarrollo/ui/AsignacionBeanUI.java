@@ -168,6 +168,14 @@ public class AsignacionBeanUI implements Serializable {
         if (!horaInicio.isBefore(horaFin)) {
             throw new Exception("La hora de inicio debe ser anterior a la hora de fin.");
         }
+
+        // Validación de rango permitido: 07:00 AM a 09:00 PM (21:00)
+        LocalTime horaMinima = LocalTime.of(7, 0);
+        LocalTime horaMaxima = LocalTime.of(21, 0);
+
+        if (horaInicio.isBefore(horaMinima) || horaFin.isAfter(horaMaxima)) {
+            throw new Exception("Las clases solo se pueden asignar dentro del rango de 07:00 AM a 09:00 PM.");
+        }
     }
 
     public void onAsignacionRowSelect(ProfesorUnidad asig) {
@@ -224,12 +232,34 @@ public class AsignacionBeanUI implements Serializable {
     }
 
     public List<Profesor> getListaProfesoresOrdenados() {
-        List<Profesor> profesores = delegateProfesor.obtenerListaProfesores();
-        if (profesores != null) {
-            profesores.sort(Comparator.comparing(Profesor::getApellidoPaterno, Comparator.nullsLast(String::compareTo))
-                    .thenComparing(Profesor::getNombre, Comparator.nullsLast(String::compareTo)));
+        List<Profesor> todosLosProfesores = delegateProfesor.obtenerListaProfesores();
+        if (delegateAsignacion != null) {
+            this.listaAsignaciones = delegateAsignacion.obtenerTodas();
         }
-        return profesores;
+
+        List<Profesor> profesoresConAsignacion = new ArrayList<>();
+        if (todosLosProfesores != null) {
+            for (Profesor prof : todosLosProfesores) {
+                boolean tieneAsignacion = false;
+                if (listaAsignaciones != null) {
+                    for (ProfesorUnidad pu : listaAsignaciones) {
+                        if (pu.getProfesor() != null && pu.getProfesor().getIdProfesor().equals(prof.getIdProfesor())) {
+                            tieneAsignacion = true;
+                            break;
+                        }
+                    }
+                }
+                if (tieneAsignacion) {
+                    profesoresConAsignacion.add(prof);
+                }
+            }
+
+            profesoresConAsignacion.sort(
+                    Comparator.comparing(Profesor::getNombre, Comparator.nullsLast(String::compareTo))
+                            .thenComparing(Profesor::getApellidoPaterno, Comparator.nullsLast(String::compareTo))
+            );
+        }
+        return profesoresConAsignacion;
     }
 
     public List<Integer> getObtenerDiasSemana() {
@@ -249,7 +279,6 @@ public class AsignacionBeanUI implements Serializable {
         if (listaAsignaciones != null) {
             for (ProfesorUnidad a : listaAsignaciones) {
                 if (a.getProfesor() != null && a.getProfesor().getIdProfesor().equals(idProfesor)) {
-                    // Corrección añadida aquí (getUnidadAprendizaje().getId())
                     if (a.getUnidadAprendizaje() != null && a.getUnidadAprendizaje().getId() != null) {
                         if (obtenerDiaIndex(a.getDia()) == diaIndex) {
                             filtradas.add(a);
