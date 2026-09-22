@@ -68,16 +68,16 @@ body {
 .decor--1 {
     width: 280px;
     height: 280px;
-    top: -120px;
-    left: -80px;
+    top: -105px;
+    left: -220px;
     background: rgba(47, 182, 103, 0.30);
 }
 
 .decor--2 {
     width: 260px;
     height: 260px;
-    top: 80px;
-    left: -180px;
+    top: 30px;
+    left: -204px;
     background: rgba(47, 182, 103, 0.30);
 }
 
