@@ -63,4 +63,14 @@ public class LoginBeanUI implements Serializable{
         this.usuario = usuario;
     }
 
+    public void cerrarSesion() throws IOException {
+        // 1. Destruye la sesión actual para borrar los datos del usuario
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+
+        // 2. Redirige a la pantalla de login
+        FacesContext.getCurrentInstance().getExternalContext().redirect(
+                FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/login.xhtml"
+        );
+    }
+
 }

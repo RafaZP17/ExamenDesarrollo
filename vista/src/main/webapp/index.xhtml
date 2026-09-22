@@ -49,8 +49,7 @@
                 </div>
                 <div class="sidebar-footer">
                     <p:graphicImage styleClass="footer-line" url="resources/line.svg" alt="" />
-                    <p:commandButton id="Sigt-outBttn" styleClass="sign-out" type="button" actionListener="#{usuarioBean.signOut()}" value="Cerrar Sesión" icon="pi pi-sign-out" />
-                </div>
+                    <p:commandButton id="Sigt-outBttn" styleClass="sign-out" action="#{loginUI.cerrarSesion}" value="Cerrar Sesión" icon="pi pi-sign-out" ajax="false" />                </div>
             </aside>
 
             <!-- Profesores -->

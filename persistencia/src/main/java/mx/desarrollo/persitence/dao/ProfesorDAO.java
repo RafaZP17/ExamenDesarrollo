@@ -70,6 +70,22 @@ public class ProfesorDAO {
         }
     }
 
+    public boolean existeRfc(String rfcAValidar) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            String jpql = "SELECT COUNT(p) FROM Profesor p WHERE p.rfc = :rfc";
+            Long conteo = em.createQuery(jpql, Long.class)
+                    .setParameter("rfc", rfcAValidar)
+                    .getSingleResult();
+            return conteo > 0; // Si es mayor a 0, devuelve true (ya existe)
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
     public List<Profesor> listar() {
         EntityManager em = emf.createEntityManager();
         try {
