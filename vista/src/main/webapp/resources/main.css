@@ -286,3 +286,26 @@ body {
         display: none;
     }
 }
+
+.login-card .btn-login.ui-button {
+    background: #00723f !important;
+    color: #ffffff !important;
+    border: 1px solid #ffffff !important;
+    margin: 0 !important;
+    outline: 0 none !important;
+    border-radius: 4px !important;
+}
+
+.login-card .btn-login.ui-button:hover {
+    background: #005a31 !important;
+}
+
+.custom-messages {
+    padding: 0 !important;
+    margin: 0 0 15px 0 !important;
+    font-weight: 600 !important;
+    position: relative !important;
+    border-radius: 4px !important;
+    width: 100% !important;
+    max-width: 390px !important;
+}

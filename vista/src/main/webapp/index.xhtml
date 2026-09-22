@@ -272,7 +272,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <p:outputLabel for="asig-profesor" value="Nombre del profesor:" />
-                        <p:selectOneMenu id="asig-profesor" value="#{asignacionUI.idProfesorSel}" styleClass="select-input" >
+                        <p:selectOneMenu id="asig-profesor" value="#{asignacionUI.idProfesorSel}" styleClass="select-input" style="width: 480px">
                             <f:selectItem itemLabel="Seleccione un profesor" itemValue="" noSelectionOption="true" />
                             <f:selectItems value="#{asignacionUI.listaProfesores}" var="p" itemLabel="#{p.nombre} #{p.apellidoPaterno}" itemValue="#{p.idProfesor}" />
                         </p:selectOneMenu>
@@ -280,7 +280,7 @@
 
                     <div class="form-group">
                         <p:outputLabel for="asig-materia" value="Asignatura:" />
-                        <p:selectOneMenu id="asig-materia" value="#{asignacionUI.idUnidadSel}" styleClass="select-input" >
+                        <p:selectOneMenu id="asig-materia" value="#{asignacionUI.idUnidadSel}" styleClass="select-input" style="width: 480px" >
                             <f:selectItem itemLabel="Seleccione una asignatura" itemValue="" noSelectionOption="true" />
                             <f:selectItems value="#{asignacionUI.listaUnidades}" var="u" itemLabel="#{u.nombre}" itemValue="#{u.id}" />
                         </p:selectOneMenu>
@@ -288,7 +288,7 @@
 
                     <div class="form-group">
                         <p:outputLabel for="asig-dia" value="Día de la clase:" />
-                        <p:selectOneMenu id="asig-dia" value="#{asignacionUI.diaSel}" styleClass="select-input" >
+                        <p:selectOneMenu id="asig-dia" value="#{asignacionUI.diaSel}" styleClass="select-input" style="width: 480px" >
                             <f:selectItem itemLabel="Seleccione un día" itemValue="" noSelectionOption="true" />
                             <f:selectItem itemLabel="Lunes" itemValue="Lunes" />
                             <f:selectItem itemLabel="Martes" itemValue="Martes" />
