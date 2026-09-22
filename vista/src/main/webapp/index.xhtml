@@ -49,7 +49,7 @@
                 </div>
                 <div class="sidebar-footer">
                     <p:graphicImage styleClass="footer-line" url="resources/line.svg" alt="" />
-                    <p:commandButton id="Sigt-outBttn" styleClass="sign-out" type="button" actionListener="#{usuarioBean.signOut()}" value="Cerrar Sesión" icon="pi pi-sign-out" />
+                    <p:button id="Sigt-outBttn" styleClass="sign-out" value="Cerrar Sesión" icon="pi pi-sign-out" outcome="login.xhtml?faces-redirect=true" />
                 </div>
             </aside>
 
@@ -215,7 +215,7 @@
 
                         <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{profesorBean.actualizarProfesor()}" process="dialogoProfesorForm" update=":mainForm:dtProfesores :mainForm:panelCalendarios dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" />
 
-                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{profesorBean.eliminarProfesor()}" process="@this" update=":mainForm:dtProfesores :mainForm:panelCalendarios dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{profesorBean.eliminarProfesor()}" process="@this" update=":mainForm:dtProfesores :mainForm:panelCalendarios dialogoProfesorForm messages" rendered="#{profesorBean.profesor.idProfesor != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgProfesor').hide(); }" style="background: red">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar este profesor?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>
@@ -254,7 +254,7 @@
 
                         <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{catalogoUI.actualizar()}" process="dialogoAsignaturaForm" update=":mainForm:dtAsignaturas :mainForm:panelCalendarios dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" />
 
-                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{catalogoUI.eliminar()}" process="@this" update=":mainForm:dtAsignaturas :mainForm:panelCalendarios dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{catalogoUI.eliminar()}" process="@this" update=":mainForm:dtAsignaturas :mainForm:panelCalendarios dialogoAsignaturaForm messages" rendered="#{catalogoUI.unidad.id != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignatura').hide(); }" style="background: red">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignatura?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>
@@ -314,7 +314,7 @@
 
                         <p:commandButton value="Actualizar" styleClass="modal-submit-btn" actionListener="#{asignacionUI.actualizarAsignacion()}" process="dialogoAsignacionForm" update="dialogoAsignacionForm messages :mainForm:panelCalendarios" rendered="#{asignacionUI.idAsignacionSel != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" />
 
-                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{asignacionUI.eliminarAsignacion()}" process="@this" update="dialogoAsignacionForm messages :mainForm:panelCalendarios" rendered="#{asignacionUI.idAsignacionSel != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }">
+                        <p:commandButton value="Eliminar" styleClass="ui-button-danger modal-submit-btn" actionListener="#{asignacionUI.eliminarAsignacion()}" process="@this" update="dialogoAsignacionForm messages :mainForm:panelCalendarios" rendered="#{asignacionUI.idAsignacionSel != null}" oncomplete="if (args &amp;&amp; args.isSaved) { PF('dlgAsignacion').hide(); }" style="background: red">
                             <p:confirm header="Confirmación" message="¿Estás seguro de eliminar esta asignación de horario?" icon="pi pi-alert" />
                         </p:commandButton>
                     </div>
